@@ -6,13 +6,53 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
+        <com.otitan.dclz.view.NoScrollViewPager
+            android:id="@+id/vp_main"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/rg_main"/>
+
+        <RadioGroup
+            android:id="@+id/rg_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true">
+
+            <RadioButton
+                android:id="@+id/rb_home"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_home_selector"
+                android:checked="true"
+                android:text="@string/main_home"/>
+
+            <RadioButton
+                android:id="@+id/rb_satellite"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_satellite_selector"
+                android:text="@string/main_satellite"/>
+
+            <RadioButton
+                android:id="@+id/rb_ground"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_ground_selector"
+                android:text="@string/main_ground"/>
+
+            <RadioButton
+                android:id="@+id/rb_inspection"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_inspection_selector"
+                android:text="@string/main_inspection"/>
+
+            <RadioButton
+                android:id="@+id/rb_monitor"
+                style="@style/style_RadioButton"
+                android:drawableTop="@drawable/rb_monitor_selector"
+                android:text="@string/main_monitor"/>
+        </RadioGroup>
+    </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

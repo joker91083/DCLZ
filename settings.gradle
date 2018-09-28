@@ -1,1 +1,7 @@
 include ':app'
+include ':LibraryManager'
+project(':LibraryManager').projectDir = new File('../LibraryManager/')
+include ':LibraryManager:baselibrary'
+include ':LibraryManager:photopicker'
+include ':LibraryManager:proj4android'
+include ':LibraryManager:versionupdata'
