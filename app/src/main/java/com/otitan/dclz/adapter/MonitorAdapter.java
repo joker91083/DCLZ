@@ -1,40 +1,37 @@
 package com.otitan.dclz.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.otitan.dclz.R;
 import com.otitan.dclz.bean.Patrol;
-import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by sp on 2018/9/27.
- * 巡查实时事件
+ * Created by sp on 2018/9/28.
+ * 事件列表
  */
-
-public class PatrolAdapter extends RecyclerView.Adapter<PatrolAdapter.MyViewHolder> {
+public class MonitorAdapter extends RecyclerView.Adapter<MonitorAdapter.MyViewHolder> {
 
     private Context mContext;
     private List<Patrol> mDatas;
 
     private MyItemClickListener mItemClickListener;
 
-    public PatrolAdapter(Context context, List<Patrol> datas) {
+    public MonitorAdapter(Context context, List<Patrol> datas) {
         mContext = context;
         mDatas = datas;
     }
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_patrol, null), mItemClickListener);
+        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(mContext).inflate(R.layout.item_monitor, null), mItemClickListener);
         return holder;
     }
 
@@ -44,12 +41,11 @@ public class PatrolAdapter extends RecyclerView.Adapter<PatrolAdapter.MyViewHold
         holder.mTv_name.setText(mDatas.get(position).getXJ_SBBH());
         holder.mTv_time.setText(mDatas.get(position).getXJ_SCRQ());
 
-        String title = mContext.getResources().getString(R.string.serverhost);
-        String fj_url = mDatas.get(position).getFJ_URL();
-        String[] split = fj_url.split(",");
-//        String path = title + split[0];
-        String path = "http://39.129.3.99:8001/UpLoadFiles/2017-04/472b3f0b-bbca-47f2-af6f-11515b23c916_2912_TMPSNAPSHOT1491274024229.jpg";
-        Picasso.with(mContext).load(path).into(holder.mIv_picture);
+        holder.mTv_status.setTextColor(Color.parseColor("#4CAF50")); // 已上报
+        holder.mTv_status.setText("已上报");
+
+        /*holder.mTv_status.setTextColor(Color.parseColor("#fc6f30")); // 未上报
+        holder.mTv_status.setText("未上报");*/
     }
 
     @Override
@@ -62,7 +58,7 @@ public class PatrolAdapter extends RecyclerView.Adapter<PatrolAdapter.MyViewHold
         private final TextView mTv_title;
         private final TextView mTv_name;
         private final TextView mTv_time;
-        private final ImageView mIv_picture;
+        private final TextView mTv_status;
 
         private MyItemClickListener mListener;
 
@@ -72,7 +68,7 @@ public class PatrolAdapter extends RecyclerView.Adapter<PatrolAdapter.MyViewHold
             mTv_title = itemView.findViewById(R.id.tv_title);
             mTv_name = itemView.findViewById(R.id.tv_name);
             mTv_time = itemView.findViewById(R.id.tv_time);
-            mIv_picture = itemView.findViewById(R.id.iv_picture);
+            mTv_status = itemView.findViewById(R.id.tv_status);
 
             // 将全局的监听赋值给接口
             this.mListener = myItemClickListener;

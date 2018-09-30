@@ -2,14 +2,18 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.otitan.dclz">
 
-    <!--网络请求-->
+    <!-- 网络请求 -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!--读取设备外部存储空间-->
+    <!-- 读取设备外部存储空间 -->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <!--写入扩展存储，向扩展卡写入数据，用于写入离线定位数据-->
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入离线定位数据 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!--用于读取手机当前的状态-->
+    <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- 相机 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- 麦克风 -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
 
     <application
         android:allowBackup="true"
@@ -25,8 +29,13 @@
             </intent-filter>
         </activity>
 
-        <!--登录-->
+        <!-- 登录 -->
         <activity android:name=".MainActivity" />
+        <!-- 事件详情 -->
+        <activity android:name=".activity.MonitorDetailActivity" />
+        <!-- 个人中心 -->
+        <activity android:name=".activity.UserActivity" />
+        <activity android:name=".activity.ChangePassActivity"></activity>
     </application>
 
 </manifest>

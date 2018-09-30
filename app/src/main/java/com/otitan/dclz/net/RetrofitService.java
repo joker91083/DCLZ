@@ -1,5 +1,9 @@
 package com.otitan.dclz.net;
 
+import com.otitan.dclz.bean.Banners;
+
+import java.util.List;
+
 import retrofit2.http.GET;
 import retrofit2.http.Query;
 import rx.Observable;
@@ -14,6 +18,18 @@ public interface RetrofitService {
     // 登录
     @GET("/webservice.asmx/UserLogin")
     Observable<String> checkLogin(@Query("username") String username, @Query("password") String password);
+
+    // 获取首页图片
+    @GET("/webservice.asmx/GetPicture")
+    Observable<List<Banners>> getBannerPath();
+
+    // 获取用户信息
+    @GET("/webservice.asmx/GetUserInfo")
+    Observable<String> getUserInfo(@Query("mobilephone") String mobilephone, @Query("usercode") String usercode, @Query("password") String password);
+
+    // 修改密码
+    @GET("/GISWebService.asmx/UpdatePassword")
+    Observable<String> changePassword(@Query("mobilephone") String mobilephone, @Query("newpassword") String newpassword);
 
     // 遥感监测数据
     @GET("/GISWebService.asmx/GetNewShInfoByDate")

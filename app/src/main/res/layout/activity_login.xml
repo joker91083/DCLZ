@@ -91,7 +91,7 @@
             android:layout_marginRight="50dp"
             android:padding="8dp"
             android:gravity="center"
-            android:background="@drawable/button_login"
+            android:background="@drawable/bg_button"
             android:textSize="18sp"
             android:textColor="#fff"
             android:text="@string/login_login"/>

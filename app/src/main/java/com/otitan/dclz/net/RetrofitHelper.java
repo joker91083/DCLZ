@@ -23,7 +23,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
  */
 
 public class RetrofitHelper {
-    private Context mCntext;
+    private Context mContext;
 
     private static NetworkMonitor networkMonitor;
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
@@ -38,7 +38,7 @@ public class RetrofitHelper {
     }
 
     private RetrofitHelper(Context mContext) {
-        mCntext = mContext;
+        this.mContext = mContext;
         init();
     }
 
@@ -53,7 +53,7 @@ public class RetrofitHelper {
         okHttpClientBuilder.readTimeout(20, TimeUnit.SECONDS);
 
         mRetrofit = new Retrofit.Builder()
-                .baseUrl(mCntext.getResources().getString(R.string.serverhost))
+                .baseUrl(mContext.getResources().getString(R.string.serverhost))
                 .client(okHttpClientBuilder.build())
                 .addConverterFactory(SimpleXmlConverterFactory.create())
                 //.addConverterFactory(GsonConverterFactory.create())
@@ -72,7 +72,7 @@ public class RetrofitHelper {
                 return chain.proceed(chain.request());
             } else {
                 //throw new NoNetworkException();
-                ToastUtil.setToast(mCntext, "无网络连接，请检查网络");
+                ToastUtil.setToast(mContext, "无网络连接，请检查网络");
             }
             return null;
         }

@@ -29,13 +29,14 @@ dependencies {
 
     // LibraryManager
     implementation project(':LibraryManager:baselibrary')
+    implementation project(path: ':LibraryManager:photopicker')
 
     // butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
 
     // 顶部banner
-    implementation 'com.bigkoo:convenientbanner:2.0.5'
+    implementation 'com.youth.banner:banner:1.4.9'
 
     // retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'
@@ -45,7 +46,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-rxjava:2.3.0'
     implementation 'io.reactivex:rxandroid:1.2.1'
     // xml
-    implementation ('com.squareup.retrofit2:converter-simplexml:2.3.0'){
+    implementation('com.squareup.retrofit2:converter-simplexml:2.3.0') {
         exclude group: 'stax', module: 'stax-api'
         exclude group: 'xpp3', module: 'xpp3'
         exclude group: 'stax', module: 'stax'
@@ -53,4 +54,7 @@ dependencies {
 
     // 图片加载
     implementation 'com.squareup.picasso:picasso:2.5.2'
+
+    // Design
+    implementation 'com.android.support:design:26.1.0'
 }

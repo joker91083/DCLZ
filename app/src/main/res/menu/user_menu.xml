@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/favorite"
+            android:icon="@drawable/ic_user_ic"
+            android:checkable="true"
+            android:title="    会员"/>
+
+    </group>
+
+    <item
+        android:id="@+id/wallet"
+        android:icon="@drawable/ic_user_ic"
+
+        android:title="    钱包"/>
+
+    <item
+        android:id="@+id/photo"
+        android:icon="@drawable/ic_user_ic"
+        android:title="    相册"/>
+
+    <item
+        android:id="@+id/dress"
+        android:icon="@drawable/ic_user_ic"
+        android:title="    装扮"/>
+
+    <item
+        android:id="@+id/item_file"
+        android:icon="@drawable/ic_user_ic"
+        android:title="    文件"/>
+
+    <item
+        android:id="@+id/item_version"
+        android:icon="@drawable/ic_user_ic"
+        android:title=" 版本信息"/>
+
+</menu>

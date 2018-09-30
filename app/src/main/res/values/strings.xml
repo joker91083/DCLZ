@@ -15,6 +15,25 @@
     <string name="main_inspection">移动巡检</string>
     <string name="main_monitor">监测周报</string>
 
+    <!--个人中心-->
+    <string name="user_title">个人中心</string>
+    <string name="user_unit">单位</string>
+    <string name="user_department">部门</string>
+    <string name="user_name">姓名</string>
+    <string name="user_sex">性别</string>
+    <string name="user_mobile">手机号码</string>
+    <string name="user_email">电子邮箱</string>
+    <string name="user_version">版本号</string>
+    <string name="user_change">修改密码</string>
+    <string name="user_check">切换账号</string>
+
+    <!--修改密码-->
+    <string name="change_title">修改密码</string>
+    <string name="change_old">旧密码</string>
+    <string name="change_new">新密码</string>
+    <string name="change_check">确认密码</string>
+    <string name="change_change">确认修改</string>
+
     <!--首页-->
     <string name="home_remote">遥感监测实况</string>
     <string name="home_satellite">卫星监测</string>
@@ -38,6 +57,18 @@
     <string name="home_odds_second">后天</string>
     <string name="home_odds_third">第三天</string>
     <string name="home_patrol">巡查实时事件</string>
+
+    <!--监测周报-->
+    <string name="monitor_title">事件列表</string>
+    <string name="monitor_detail_title">事件上报</string>
+    <string name="monitor_detail_name">事件名称</string>
+    <string name="monitor_detail_description">事件描述</string>
+    <string name="monitor_detail_longitude">经度</string>
+    <string name="monitor_detail_latitude">纬度</string>
+    <string name="monitor_detail_address">详细地址</string>
+    <string name="monitor_detail_picture">现场图片</string>
+    <string name="monitor_detail_audio">现场音频</string>
+    <string name="monitor_detail_video">现场视频</string>
 
     <!--权限判断-->
     <string name="help">帮助</string>
