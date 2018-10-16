@@ -247,17 +247,23 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.rb_first:
                 mRb_first.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mRb_second.setTextColor(getResources().getColor(R.color.gray));
+                mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(1);
                 break;
 
             case R.id.rb_second:
+                mRb_first.setTextColor(getResources().getColor(R.color.gray));
                 mRb_second.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(2);
                 break;
 
             case R.id.rb_third:
+                mRb_first.setTextColor(getResources().getColor(R.color.gray));
+                mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(3);
@@ -405,7 +411,7 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
             int x = Integer.parseInt(String.valueOf(e.getX()).split("\\.")[0]);
             int y = Integer.parseInt(String.valueOf(e.getY()).split("\\.")[0]);
             Point point = mMv_satellite.screenToLocation(new android.graphics.Point(x, y));
-            Geometry project = GeometryEngine.project(point, SpatialReference.create(4326));
+            Point myPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326));
             return super.onSingleTapConfirmed(e);
         }
     }

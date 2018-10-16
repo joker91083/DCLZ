@@ -62,6 +62,18 @@
     <string name="satellite_tool">工具</string>
     <string name="satellite_layer">图层</string>
 
+    <!--地基遥感-->
+    <string name="ground_tool">工具</string>
+    <string name="ground_layer">图层</string>
+
+    <!--移动巡检-->
+    <string name="inspection_tool">工具</string>
+    <string name="inspection_layer">图层控制</string>
+    <string name="inspection_locus">轨迹查询</string>
+    <string name="inspection_report">事件上报</string>
+    <string name="inspection_inquire">事件查询</string>
+    <string name="inspection_start">开始记录</string>
+
     <!--工具-->
     <string name="tool_coordinate">获取点坐标</string>
     <string name="tool_navigation">导航</string>
