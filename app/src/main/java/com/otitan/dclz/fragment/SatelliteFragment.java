@@ -4,7 +4,9 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -14,23 +16,28 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.esri.arcgisruntime.data.TileCache;
+import com.esri.arcgisruntime.geometry.Geometry;
+import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.otitan.dclz.MyMapViewOnTouchListener;
 import com.otitan.dclz.R;
 import com.otitan.dclz.bean.Monitor;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.otitan.dclz.util.TimeUtil;
+import com.titan.baselibrary.timepaker.TimePopupWindow;
 import com.titan.baselibrary.util.ToastUtil;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,7 +50,7 @@ import rx.schedulers.Schedulers;
  * Created by sp on 2018/9/25.
  * 卫星遥感
  */
-public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedChangeListener, View.OnClickListener {
+public class SatelliteFragment extends Fragment implements View.OnClickListener {
 
     @BindView(R.id.mv_satellite)
     MapView mMv_satellite;
@@ -56,6 +63,8 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
     RadioButton mRb_second;
     @BindView(R.id.rb_third)
     RadioButton mRb_third;
+    @BindView(R.id.iv_more)
+    ImageView mIv_more;
 
     @BindView(R.id.ic_edit)
     View mIc_edit;
@@ -108,7 +117,7 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
         initLocation();
 
         // 获取遥感监测数据
-        getRemoteData();
+        getRemoteData("", 0);
 
         /*Calendar c = Calendar.getInstance();
         int date = c.get(Calendar.DATE);
@@ -122,7 +131,12 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
         mRb_third.setText(new SimpleDateFormat("yyyy-MM-dd").format(c.getTime()));*/
 
         // 顶部时间选择
-        mRg_satellite.setOnCheckedChangeListener(this);
+        mRb_first.setOnClickListener(this);
+        mRb_second.setOnClickListener(this);
+        mRb_third.setOnClickListener(this);
+
+        // 更多时间选择
+        mIv_more.setOnClickListener(this);
 
         // 定位
         mIv_location.setOnClickListener(this);
@@ -203,24 +217,6 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
         }
     }
 
-    @Override
-    public void onCheckedChanged(RadioGroup radioGroup, int i) {
-        switch (i) {
-            case R.id.rb_first:
-                mIc_edit.setVisibility(View.VISIBLE);
-                showEdit(1);
-                break;
-            case R.id.rb_second:
-                mIc_edit.setVisibility(View.VISIBLE);
-                showEdit(2);
-                break;
-            case R.id.rb_third:
-                mIc_edit.setVisibility(View.VISIBLE);
-                showEdit(3);
-                break;
-        }
-    }
-
     /**
      * 监测记录
      */
@@ -249,6 +245,48 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.rb_first:
+                mRb_first.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mIc_edit.setVisibility(View.VISIBLE);
+                showEdit(1);
+                break;
+
+            case R.id.rb_second:
+                mRb_second.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mIc_edit.setVisibility(View.VISIBLE);
+                showEdit(2);
+                break;
+
+            case R.id.rb_third:
+                mRb_third.setTextColor(getResources().getColor(R.color.colorPrimary));
+                mIc_edit.setVisibility(View.VISIBLE);
+                showEdit(3);
+                break;
+
+            case R.id.iv_more:
+                TimePopupWindow timePopupWindow = new TimePopupWindow(mContext, TimePopupWindow.Type.YEAR_MONTH_DAY);
+                timePopupWindow.setCyclic(true);
+                // 时间选择后回调
+                timePopupWindow.setOnTimeSelectListener(new TimePopupWindow.OnTimeSelectListener() {
+
+                    @Override
+                    public void onTimeSelect(Date date) {
+                        String choose = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
+                        long lChoose = TimeUtil.getLonfromYyr(choose);
+                        long lToday = TimeUtil.getLonfromYyr(today);
+                        if (lChoose <= lToday) {
+                            mTv_title.setText(choose + " 监测记录");
+                            // 根据选择的时间，查询监测信息
+                            getRemoteData(choose, 1);
+                        } else {
+                            ToastUtil.setToast(mContext, "选择日期错误，无法查询！");
+                        }
+                    }
+                });
+                timePopupWindow.showAtLocation(mTv_title, Gravity.CENTER, 0, 0, new Date());
+                break;
+
             case R.id.iv_location:
                 myLocation();
                 break;
@@ -257,15 +295,13 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
                 mIc_edit.setVisibility(View.INVISIBLE);
                 switch (index) {
                     case 1:
-                        mRb_first.setChecked(false);
+                        mRb_first.setTextColor(getResources().getColor(R.color.gray));
                         break;
-
                     case 2:
-                        mRb_second.setChecked(false);
+                        mRb_second.setTextColor(getResources().getColor(R.color.gray));
                         break;
-
                     case 3:
-                        mRb_third.setChecked(false);
+                        mRb_third.setTextColor(getResources().getColor(R.color.gray));
                         break;
                 }
                 break;
@@ -282,7 +318,7 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
 
             case R.id.ll_coordinate: // 获取点坐标
                 ToastUtil.setToast(mContext, "获取点坐标");
-//                mMv_satellite.setOnTouchListener(new MyMapViewOnTouchListener(mContext, mMv_satellite));
+                mMv_satellite.setOnTouchListener(new MyMapViewOnTouchListener(mContext, mMv_satellite));
                 break;
 
             case R.id.ll_navigation: // 导航
@@ -314,8 +350,8 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
     /**
      * 获取遥感监测数据
      */
-    private void getRemoteData() {
-        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getMonitorData("", 0);
+    private void getRemoteData(String time, final int i) {
+        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getMonitorData(time, 0);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
             public void onCompleted() {
@@ -330,62 +366,47 @@ public class SatelliteFragment extends Fragment implements RadioGroup.OnCheckedC
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    monitorList = new Gson().fromJson(s, new TypeToken<ArrayList<Monitor>>() {}.getType());
+                    switch (i) {
+                        case 0:
+                            monitorList = new Gson().fromJson(s, new TypeToken<ArrayList<Monitor>>() {}.getType());
 
-                    mRb_first.setText(monitorList.get(0).getJC_DATE());
-                    mRb_second.setText(monitorList.get(1).getJC_DATE());
-                    mRb_third.setText(monitorList.get(2).getJC_DATE());
+                            mRb_first.setText(monitorList.get(0).getJC_DATE());
+                            mRb_second.setText(monitorList.get(1).getJC_DATE());
+                            mRb_third.setText(monitorList.get(2).getJC_DATE());
+                            break;
+                        case 1:
+                            Monitor monitor = new Gson().fromJson(s.substring(1, s.length() - 1), Monitor.class);
+                            mTv_edit.setText(monitor.getJC_JGFX());
+                            mIc_edit.setVisibility(View.VISIBLE);
+                            break;
+                    }
                 } else {
-
+                    switch (i) {
+                        case 0:
+                            break;
+                        case 1:
+                            mTv_edit.setText("暂无监测数据");
+                            mIc_edit.setVisibility(View.VISIBLE);
+                            break;
+                    }
                 }
             }
         });
     }
 
-    /*private inner class MapViewOnTouchListener(mContext: Context, mMapView: MapView) : DefaultMapViewOnTouchListener(mContext, mMapView) {
-        override fun onSingleTapConfirmed(e: MotionEvent?): Boolean {
-            try {
-                clearSelect()
-                val screenPoint = e?.let { android.graphics.Point(it.x.toInt(), it.y.toInt()) }
-                        ?: return super.onSingleTapConfirmed(e)
-                val identifyGraphic:ListenableFuture<IdentifyGraphicsOverlayResult>?
-                identifyGraphic = if (viewModel!!.editLayer!!.name!!.contains("苗圃")) {
-                    mMapView.identifyGraphicsOverlayAsync(mNurseryOverlay, screenPoint, 10.0, false, 1)
-                } else {
-                    mMapView.identifyGraphicsOverlayAsync(mLandOverlay, screenPoint, 10.0, false, 1)
-                }
-                identifyGraphic.addDoneListener {
-                    val result = identifyGraphic.get()
-                    if (identifyGraphic.isDone) {
-                        /owCallout(result.graphics[0])
-                        if (result.graphics.isNotEmpty()) {
-                            mSelectGraphic = result.graphics[0]
-                            viewModel?.mSelectGraphic = mSelectGraphic
-                            result.graphics[0].isSelected = true
-                            //mGraphicsOverlay.graphics.get
-                        } else {
-                            mSelectGraphic = null
-                            viewModel?.mSelectGraphic = null
-                        }
-                    } else {
-                        viewModel?.snackbarText?.set("选择数据失败" + result.error)
-                    }
-                }
-            } catch (e: Exception) {
-                showToast(0, "地图点击事件错误：$e")
-            }
+    class MyMapViewOnTouchListener extends DefaultMapViewOnTouchListener {
 
-            return super.onSingleTapConfirmed(e)
+        MyMapViewOnTouchListener(Context context, MapView mapView) {
+            super(context, mapView);
         }
 
-        override fun onRotate(event: MotionEvent?, rotationAngle: Double): Boolean {
-            return true
-        }
-
-        override fun onScaleEnd(detector: ScaleGestureDetector?) {
-            super.onScaleEnd(detector)
-            Log.e("tag", "比例尺：${binding?.mapview?.mapScale}")
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            int x = Integer.parseInt(String.valueOf(e.getX()).split("\\.")[0]);
+            int y = Integer.parseInt(String.valueOf(e.getY()).split("\\.")[0]);
+            Point point = mMv_satellite.screenToLocation(new android.graphics.Point(x, y));
+            Geometry project = GeometryEngine.project(point, SpatialReference.create(4326));
+            return super.onSingleTapConfirmed(e);
         }
     }
-*/
 }
