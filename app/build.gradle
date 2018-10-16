@@ -4,11 +4,12 @@ android {
     compileSdkVersion 26
     defaultConfig {
         applicationId "com.otitan.dclz"
-        minSdkVersion 15
+        minSdkVersion 19
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -57,4 +58,7 @@ dependencies {
 
     // Design
     implementation 'com.android.support:design:26.1.0'
+
+    // arcgis
+    implementation 'com.esri.arcgisruntime:arcgis-android:100.3.0'
 }

@@ -3,18 +3,17 @@ package com.otitan.dclz.activity;
 import android.Manifest;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.media.MediaRecorder;
+import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.lling.photopicker.PhotoPickerActivity;
@@ -24,6 +23,8 @@ import com.otitan.dclz.adapter.SelectPictureAdapter;
 import com.otitan.dclz.permission.PermissionsChecker;
 import com.titan.baselibrary.util.ToastUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * 事件上报
  */
-public class MonitorDetailActivity extends AppCompatActivity {
+public class MonitorDetailActivity extends AppCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.iv_back)
     ImageView mIv_back;
@@ -49,6 +50,8 @@ public class MonitorDetailActivity extends AppCompatActivity {
     EditText mEt_address;
     @BindView(R.id.rv_picture)
     RecyclerView mRv_picture;
+    @BindView(R.id.iv_audio)
+    ImageView mIv_audio;
     @BindView(R.id.rv_audio)
     RecyclerView mRv_audio;
     @BindView(R.id.rv_video)
@@ -64,7 +67,7 @@ public class MonitorDetailActivity extends AppCompatActivity {
     private PermissionsChecker permissionsChecker;
     private String[] permissions = new String[] {
             Manifest.permission.CAMERA,
-            android.Manifest.permission.MODIFY_AUDIO_SETTINGS
+            Manifest.permission.RECORD_AUDIO
     };
 
     @Override
@@ -105,13 +108,19 @@ public class MonitorDetailActivity extends AppCompatActivity {
                 toSelectPic();
             }
         });
+
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mColumnWidth, mColumnWidth);
+        params.setMargins(15, 10,10, 10);
+        mIv_audio.setLayoutParams(params);
+
+        mIv_audio.setOnClickListener(this);
     }
 
     /**
      * 跳转到选择图片界面
      */
     public void toSelectPic() {
-        if (picList.size() != 0 && picList.size() != 3) {
+        if (picList.size() != 0 && picList.size() != 9) {
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("重新选择会覆盖之前的图片");
             builder.setMessage("是否重新选择");
@@ -170,6 +179,42 @@ public class MonitorDetailActivity extends AppCompatActivity {
                     }
                 }
             });
+        }
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_audio:
+
+                MediaRecorder mediaRecorder = new MediaRecorder();
+                // 第1步：设置音频来源（MIC表示麦克风）
+                mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
+                // 第2步：设置音频输出格式（默认的输出格式）
+                mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.DEFAULT);
+                // 第3步：设置音频编码方式（默认的编码方式）
+                mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.DEFAULT);
+                // 创建一个临时的音频输出文件
+                File audioFile = null;
+                try {
+                    audioFile = File.createTempFile("record_", ".amr");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // 第4步：指定音频输出文件
+                mediaRecorder.setOutputFile(audioFile.getAbsolutePath());
+                // 第5步：调用prepare方法
+                try {
+                    mediaRecorder.prepare();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                // 第6步：调用start方法开始录音
+                mediaRecorder.start();
+
+                ToastUtil.setToast(this, "录音");
+
+                break;
         }
     }
 }

@@ -10,10 +10,14 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 用于读取手机当前的状态 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <!-- GPS -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <!-- 相机 -->
     <uses-permission android:name="android.permission.CAMERA" />
-    <!-- 麦克风 -->
-    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <!-- 录音 -->
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +39,9 @@
         <activity android:name=".activity.MonitorDetailActivity" />
         <!-- 个人中心 -->
         <activity android:name=".activity.UserActivity" />
-        <activity android:name=".activity.ChangePassActivity"></activity>
+        <!-- 修改密码 -->
+        <activity android:name=".activity.ChangePassActivity" />
+
     </application>
 
 </manifest>

@@ -191,6 +191,13 @@
                     android:layout_margin="10dp"
                     android:text="@string/monitor_detail_audio"/>
 
+                <ImageView
+                    android:id="@+id/iv_audio"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_audio"/>
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_audio"
                     android:layout_width="match_parent"

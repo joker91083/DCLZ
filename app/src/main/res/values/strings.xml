@@ -58,6 +58,18 @@
     <string name="home_odds_third">第三天</string>
     <string name="home_patrol">巡查实时事件</string>
 
+    <!--卫星遥感-->
+    <string name="satellite_tool">工具</string>
+    <string name="satellite_layer">图层</string>
+
+    <!--工具-->
+    <string name="tool_coordinate">获取点坐标</string>
+    <string name="tool_navigation">导航</string>
+    <string name="tool_attribute">属性查询</string>
+    <string name="tool_distance">测量距离</string>
+    <string name="tool_area">测量面积</string>
+    <string name="tool_clean">清除标绘</string>
+
     <!--监测周报-->
     <string name="monitor_title">事件列表</string>
     <string name="monitor_detail_title">事件上报</string>
@@ -76,8 +88,12 @@
     <string name="quit">退出</string>
     <string name="settings">设置</string>
 
+    <!--在线底图-->
+    <string name="World_Imagery">http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer</string>
+    <string name="World_Street_Map">http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer</string>
+
     <!--云服务-->
-    <string name="serverhost">http://101.201.54.143:5830/</string><!--webservice.asmx-->
+    <string name="serverhost">http://101.201.54.143:5830/</string>
     <!--客户内网-->
-    <!--<string name="serverhost">http://192.168.168.62:8010/</string>--><!--GISWebService.asmx-->
+    <!--<string name="serverhost">http://192.168.168.62:8010/</string>-->
 </resources>
