@@ -1,6 +1,7 @@
 package com.otitan.dclz.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,7 @@ import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.otitan.dclz.R;
+import com.otitan.dclz.activity.MonitorDetailActivity;
 import com.titan.baselibrary.util.ToastUtil;
 
 import butterknife.BindView;
@@ -190,7 +192,12 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_report: // 事件上报
-                ToastUtil.setToast(mContext, "事件上报");
+                Intent intent = new Intent(mContext, MonitorDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("X", String.valueOf(currentPoint.getX()));
+                bundle.putString("Y", String.valueOf(currentPoint.getY()));
+                intent.putExtras(bundle);
+                startActivity(intent);
                 break;
 
             case R.id.ll_inquire: // 事件查询

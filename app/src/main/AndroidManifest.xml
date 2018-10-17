@@ -25,7 +25,19 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".activity.LoginActivity">
+
+        <meta-data
+            android:name="com.baidu.lbsapi.API_KEY"
+            android:value="3EwhfxFaWdFtK3YUMGdwesdA0QVk9NgZ" />
+
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote"/>
+
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait"> <!-- 限制此页面数竖屏显示 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -33,14 +45,18 @@
             </intent-filter>
         </activity>
 
-        <!-- 登录 -->
-        <activity android:name=".MainActivity" />
+        <!-- 主页 -->
+        <activity android:name=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <!-- 事件详情 -->
-        <activity android:name=".activity.MonitorDetailActivity" />
+        <activity android:name=".activity.MonitorDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <!-- 个人中心 -->
-        <activity android:name=".activity.UserActivity" />
+        <activity android:name=".activity.UserActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
         <!-- 修改密码 -->
-        <activity android:name=".activity.ChangePassActivity" />
+        <activity android:name=".activity.ChangePassActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
 
     </application>
 

@@ -84,6 +84,8 @@
 
     <!--监测周报-->
     <string name="monitor_title">事件列表</string>
+
+    <!--事件上报-->
     <string name="monitor_detail_title">事件上报</string>
     <string name="monitor_detail_name">事件名称</string>
     <string name="monitor_detail_description">事件描述</string>
@@ -93,6 +95,8 @@
     <string name="monitor_detail_picture">现场图片</string>
     <string name="monitor_detail_audio">现场音频</string>
     <string name="monitor_detail_video">现场视频</string>
+    <string name="monitor_detail_temporary">本地暂存</string>
+    <string name="monitor_detail_report">立即上报</string>
 
     <!--权限判断-->
     <string name="help">帮助</string>

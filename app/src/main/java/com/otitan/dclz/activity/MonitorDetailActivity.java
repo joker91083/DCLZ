@@ -52,10 +52,16 @@ public class MonitorDetailActivity extends AppCompatActivity implements View.OnC
     RecyclerView mRv_picture;
     @BindView(R.id.iv_audio)
     ImageView mIv_audio;
-    @BindView(R.id.rv_audio)
+    @BindView(R.id.iv_video)
+    ImageView mIv_video;
+    @BindView(R.id.tv_temporary)
+    TextView mTv_temporary;
+    @BindView(R.id.tv_report)
+    TextView mTv_report;
+    /*@BindView(R.id.rv_audio)
     RecyclerView mRv_audio;
     @BindView(R.id.rv_video)
-    RecyclerView mRv_video;
+    RecyclerView mRv_video;*/
 
     @BindView(R.id.tv_picture)
     TextView mTv_picture;
@@ -94,6 +100,9 @@ public class MonitorDetailActivity extends AppCompatActivity implements View.OnC
             }
         });
 
+        mEt_longitude.setText(getIntent().getStringExtra("X"));
+        mEt_latitude.setText(getIntent().getStringExtra("Y"));
+
         int screenWidth = OtherUtils.getWidthInPx(getApplicationContext());
         int mColumnWidth = (screenWidth - OtherUtils.dip2px(getApplicationContext(), 4)) / 4;
 
@@ -112,8 +121,10 @@ public class MonitorDetailActivity extends AppCompatActivity implements View.OnC
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mColumnWidth, mColumnWidth);
         params.setMargins(15, 10,10, 10);
         mIv_audio.setLayoutParams(params);
+        mIv_video.setLayoutParams(params);
 
         mIv_audio.setOnClickListener(this);
+        mIv_video.setOnClickListener(this);
     }
 
     /**
