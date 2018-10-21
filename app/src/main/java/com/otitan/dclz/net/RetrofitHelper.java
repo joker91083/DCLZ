@@ -25,7 +25,7 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class RetrofitHelper {
     private Context mContext;
 
-    private static NetworkMonitor networkMonitor;
+    public static NetworkMonitor networkMonitor;
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
     private static RetrofitHelper instance = null;
     private Retrofit mRetrofit = null;

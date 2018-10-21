@@ -64,6 +64,7 @@ public class SelectPictureAdapter extends RecyclerView.Adapter<SelectPictureAdap
 
             mIv_picture = itemView.findViewById(R.id.iv_picture);
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(mColumnWidth, mColumnWidth);
+            params.setMargins(10,10,10,10);
             mIv_picture.setLayoutParams(params);
 
             // 将全局的监听赋值给接口

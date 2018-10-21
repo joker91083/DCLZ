@@ -4,6 +4,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.util.AsyncListUtil;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -15,21 +16,37 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
+import com.esri.arcgisruntime.data.Feature;
+import com.esri.arcgisruntime.data.FeatureQueryResult;
+import com.esri.arcgisruntime.data.FeatureTable;
+import com.esri.arcgisruntime.data.QueryParameters;
 import com.esri.arcgisruntime.data.TileCache;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
+import com.esri.arcgisruntime.geometry.GeometryType;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
+import com.esri.arcgisruntime.layers.FeatureLayer;
+import com.esri.arcgisruntime.layers.Layer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.mapping.LayerList;
 import com.esri.arcgisruntime.mapping.view.DefaultMapViewOnTouchListener;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.mapping.view.SketchEditor;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otitan.dclz.R;
+import com.otitan.dclz.bean.ActionModel;
 import com.otitan.dclz.bean.Monitor;
+import com.otitan.dclz.common.CalloutViewModel;
+import com.otitan.dclz.common.GeometryChangedListener;
+import com.otitan.dclz.common.MyMapViewOnTouchListener;
+import com.otitan.dclz.common.ToolViewModel;
+import com.otitan.dclz.common.ValueCallback;
 import com.otitan.dclz.net.RetrofitHelper;
 import com.otitan.dclz.util.TimeUtil;
 import com.titan.baselibrary.timepaker.TimePopupWindow;
@@ -38,9 +55,12 @@ import com.titan.baselibrary.util.ToastUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.concurrent.ExecutionException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -50,10 +70,10 @@ import rx.schedulers.Schedulers;
  * Created by sp on 2018/9/25.
  * 卫星遥感
  */
-public class SatelliteFragment extends Fragment implements View.OnClickListener {
+public class SatelliteFragment extends Fragment implements View.OnClickListener,ValueCallback {
 
     @BindView(R.id.mv_satellite)
-    MapView mMv_satellite;
+    MapView mapView;
 
     @BindView(R.id.rg_satellite)
     RadioGroup mRg_satellite;
@@ -99,6 +119,10 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
     private int iTool = 0;
     private ArrayList<Monitor> monitorList;
 
+    private ToolViewModel toolViewModel;
+    private CalloutViewModel calloutViewModel;
+    private ActionModel actionModel = ActionModel.NULL;
+    private MyMapViewOnTouchListener touchListener = null;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -108,6 +132,8 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         mContext = SatelliteFragment.this.getContext();
 
         initView();
+
+        initViewModel();
 
         return inflate;
     }
@@ -176,10 +202,21 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
         ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
         arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
-        mMv_satellite.setMap(arcGISMap);
+        mapView.setMap(arcGISMap);
 
         // 去除下方 powered by esri 按钮
-        mMv_satellite.setAttributionTextVisible(false);
+        mapView.setAttributionTextVisible(false);
+
+        SketchEditor sketchEditor = new SketchEditor();
+        sketchEditor.addGeometryChangedListener(new GeometryChangedListener(this,mapView));
+        mapView.setSketchEditor(sketchEditor);
+
+        View.OnTouchListener lo = mapView.getOnTouchListener();
+        if(null != lo){
+            touchListener = new MyMapViewOnTouchListener(mapView.getContext(),mapView,lo,this);
+            mapView.setOnTouchListener(touchListener);
+        }
+
     }
 
     /**
@@ -187,7 +224,7 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
      */
     private void initLocation() {
         // 当前位置
-        LocationDisplay mLocDisplay = mMv_satellite.getLocationDisplay();
+        final LocationDisplay mLocDisplay = mapView.getLocationDisplay();
         // 设置显示的位置
         mLocDisplay.setNavigationPointHeightFactor(0.5f);
         // 定位显示
@@ -206,37 +243,48 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         });
     }
 
+    /**/
+    private void initViewModel(){
+        toolViewModel = new ToolViewModel();
+        calloutViewModel = new CalloutViewModel();
+    }
+
     /**
      * 当前位置
      */
     private void myLocation() {
         if (currentPoint != null) {
-            mMv_satellite.setViewpointCenterAsync(currentPoint, 5000);
+            mapView.setViewpointCenterAsync(currentPoint, 5000);
         } else {
             ToastUtil.setToast(mContext, "未获取到当前位置");
         }
     }
 
+
     /**
      * 监测记录
      */
     private void showEdit(int i) {
+        String value = "";
         switch (i) {
             case 1:
                 index = 1;
-                mTv_title.setText(mRb_first.getText().toString().trim() + " 监测记录");
+                value = mRb_first.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(0).getJC_JGFX());
                 break;
 
             case 2:
                 index = 2;
-                mTv_title.setText(mRb_second.getText().toString().trim() + " 监测记录");
+                value = mRb_second.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(1).getJC_JGFX());
                 break;
 
             case 3:
                 index = 3;
-                mTv_title.setText(mRb_third.getText().toString().trim() + " 监测记录");
+                value = mRb_third.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(2).getJC_JGFX());
                 break;
         }
@@ -247,23 +295,17 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         switch (view.getId()) {
             case R.id.rb_first:
                 mRb_first.setTextColor(getResources().getColor(R.color.colorPrimary));
-                mRb_second.setTextColor(getResources().getColor(R.color.gray));
-                mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(1);
                 break;
 
             case R.id.rb_second:
-                mRb_first.setTextColor(getResources().getColor(R.color.gray));
                 mRb_second.setTextColor(getResources().getColor(R.color.colorPrimary));
-                mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(2);
                 break;
 
             case R.id.rb_third:
-                mRb_first.setTextColor(getResources().getColor(R.color.gray));
-                mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mIc_edit.setVisibility(View.VISIBLE);
                 showEdit(3);
@@ -324,7 +366,8 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
 
             case R.id.ll_coordinate: // 获取点坐标
                 ToastUtil.setToast(mContext, "获取点坐标");
-                mMv_satellite.setOnTouchListener(new MyMapViewOnTouchListener(mContext, mMv_satellite));
+                actionModel = ActionModel.MapPOINT;
+                toolViewModel.getMapPoint(mapView);
                 break;
 
             case R.id.ll_navigation: // 导航
@@ -333,18 +376,25 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
 
             case R.id.ll_attribute: // 属性查询
                 ToastUtil.setToast(mContext, "属性查询");
+                actionModel = ActionModel.IQUERY;
+                toolViewModel.iSercher(mapView);
                 break;
 
             case R.id.ll_distance: // 测量距离
                 ToastUtil.setToast(mContext, "测量距离");
+                actionModel = ActionModel.DISTANCE;
+                toolViewModel.distance(mapView);
                 break;
 
             case R.id.ll_area: // 测量面积
                 ToastUtil.setToast(mContext, "测量面积");
+                actionModel = ActionModel.AREA;
+                toolViewModel.area(mapView);
                 break;
 
             case R.id.ll_clean: // 清除标绘
                 ToastUtil.setToast(mContext, "清除标绘");
+                toolViewModel.clear(mapView);
                 break;
 
             case R.id.ll_layer:
@@ -400,19 +450,34 @@ public class SatelliteFragment extends Fragment implements View.OnClickListener 
         });
     }
 
-    class MyMapViewOnTouchListener extends DefaultMapViewOnTouchListener {
+    @Override
+    public void onSuccess(Object t) {
 
-        MyMapViewOnTouchListener(Context context, MapView mapView) {
-            super(context, mapView);
+    }
+
+    @Override
+    public void onFail(String value) {
+
+    }
+
+    @Override
+    public void onGeometry(Geometry geometry) {
+        if(actionModel == ActionModel.DISTANCE){
+            calloutViewModel.showDistance(mapView,geometry);
         }
 
-        @Override
-        public boolean onSingleTapConfirmed(MotionEvent e) {
-            int x = Integer.parseInt(String.valueOf(e.getX()).split("\\.")[0]);
-            int y = Integer.parseInt(String.valueOf(e.getY()).split("\\.")[0]);
-            Point point = mMv_satellite.screenToLocation(new android.graphics.Point(x, y));
-            Point myPoint = (Point) GeometryEngine.project(point, SpatialReference.create(4326));
-            return super.onSingleTapConfirmed(e);
+        if(actionModel == ActionModel.AREA){
+            calloutViewModel.showDistance(mapView,geometry);
+        }
+
+        if(actionModel == ActionModel.MapPOINT){
+            calloutViewModel.showPoint(mapView,geometry);
+        }
+
+        if(actionModel == ActionModel.IQUERY){
+            toolViewModel.iquery(mapView,geometry,calloutViewModel);
         }
     }
+
+
 }

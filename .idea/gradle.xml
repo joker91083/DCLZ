@@ -11,6 +11,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/../LibraryManager" />
             <option value="$PROJECT_DIR$/../LibraryManager/baselibrary" />
+            <option value="$PROJECT_DIR$/../LibraryManager/medialibrary" />
             <option value="$PROJECT_DIR$/../LibraryManager/photopicker" />
             <option value="$PROJECT_DIR$/../LibraryManager/proj4android" />
             <option value="$PROJECT_DIR$/../LibraryManager/versionupdata" />

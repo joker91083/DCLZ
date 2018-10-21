@@ -11,6 +11,8 @@ import android.widget.TextView;
 import com.otitan.dclz.MainActivity;
 import com.otitan.dclz.R;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.otitan.dclz.util.MobileUtil;
+import com.otitan.dclz.util.ResourceHelper;
 import com.titan.baselibrary.util.ToastUtil;
 
 import butterknife.BindView;
@@ -68,7 +70,11 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 } else if (pass.equals("")) {
                     ToastUtil.setToast(this, "请输入密码");
                 } else {
-                    login(user, pass);
+                    if(RetrofitHelper.getInstance(this).networkMonitor.isConnected()){
+                        login(user, pass);
+                    }else{
+                        ToastUtil.setToast(this,"网络未连接");
+                    }
                 }
                 break;
         }
@@ -103,5 +109,41 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             }
         });
+    }
+
+    /*注册设备号到后台*/
+    private void addMacAddress(){
+        String sbh = MobileUtil.getInstance().getMacAdress(this);
+        String xlh = MobileUtil.getInstance().getMobileXlh(this);
+        Observable<String> observable = RetrofitHelper.getInstance(this).getServer().addMacAddress(sbh, xlh);
+        observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
+            @Override
+            public void onCompleted() { // 完成请求后
+
+            }
+
+            @Override
+            public void onError(Throwable e) { // 异常处理
+
+            }
+
+            @Override
+            public void onNext(String s) { // 请求成功
+                if (s.contains("1")) {
+                    //注册成功
+                } else {
+
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        if(RetrofitHelper.getInstance(this).networkMonitor.isConnected()){
+            addMacAddress();
+        }
     }
 }

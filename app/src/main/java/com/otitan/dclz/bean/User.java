@@ -1,10 +1,12 @@
 package com.otitan.dclz.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by sp on 2018/9/30.
  * 用户信息
  */
-public class User {
+public class User implements Serializable {
 
     private String code; //
 

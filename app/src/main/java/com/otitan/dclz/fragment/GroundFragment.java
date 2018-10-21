@@ -15,16 +15,24 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.esri.arcgisruntime.data.TileCache;
+import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.mapping.view.SketchEditor;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.otitan.dclz.R;
+import com.otitan.dclz.bean.ActionModel;
 import com.otitan.dclz.bean.Monitor;
+import com.otitan.dclz.common.CalloutViewModel;
+import com.otitan.dclz.common.GeometryChangedListener;
+import com.otitan.dclz.common.MyMapViewOnTouchListener;
+import com.otitan.dclz.common.ToolViewModel;
+import com.otitan.dclz.common.ValueCallback;
 import com.otitan.dclz.net.RetrofitHelper;
 import com.otitan.dclz.util.TimeUtil;
 import com.titan.baselibrary.timepaker.TimePopupWindow;
@@ -45,10 +53,10 @@ import rx.schedulers.Schedulers;
  * Created by sp on 2018/9/25.
  * 地基遥感
  */
-public class GroundFragment extends Fragment implements View.OnClickListener {
+public class GroundFragment extends Fragment implements View.OnClickListener,ValueCallback {
 
     @BindView(R.id.mv_ground)
-    MapView mMv_ground;
+    MapView mapView;
 
     @BindView(R.id.rg_ground)
     RadioGroup mRg_satellite;
@@ -94,6 +102,11 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
     private int iTool = 0;
     private ArrayList<Monitor> monitorList;
 
+    private ActionModel actionModel;
+    private ToolViewModel toolViewModel;
+    private CalloutViewModel calloutViewModel;
+    private MyMapViewOnTouchListener touchListener = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -103,6 +116,8 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
         mContext = GroundFragment.this.getContext();
 
         initView();
+
+        initViewModel();
 
         return inflate;
     }
@@ -160,10 +175,27 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
         TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
         ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
         arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
-        mMv_ground.setMap(arcGISMap);
+        mapView.setMap(arcGISMap);
 
         // 去除下方 powered by esri 按钮
-        mMv_ground.setAttributionTextVisible(false);
+        mapView.setAttributionTextVisible(false);
+
+        SketchEditor sketchEditor = new SketchEditor();
+        sketchEditor.addGeometryChangedListener(new GeometryChangedListener(this,mapView));
+        mapView.setSketchEditor(sketchEditor);
+
+        View.OnTouchListener lo = mapView.getOnTouchListener();
+        if(null != lo){
+            touchListener = new MyMapViewOnTouchListener(mapView.getContext(),mapView,lo,this);
+            mapView.setOnTouchListener(touchListener);
+        }
+    }
+
+
+    /**/
+    private void initViewModel(){
+        toolViewModel = new ToolViewModel();
+        calloutViewModel = new CalloutViewModel();
     }
 
     /**
@@ -171,7 +203,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
      */
     private void initLocation() {
         // 当前位置
-        LocationDisplay mLocDisplay = mMv_ground.getLocationDisplay();
+        LocationDisplay mLocDisplay = mapView.getLocationDisplay();
         // 设置显示的位置
         mLocDisplay.setNavigationPointHeightFactor(0.5f);
         // 定位显示
@@ -195,7 +227,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
      */
     private void myLocation() {
         if (currentPoint != null) {
-            mMv_ground.setViewpointCenterAsync(currentPoint, 5000);
+            mapView.setViewpointCenterAsync(currentPoint, 5000);
         } else {
             ToastUtil.setToast(mContext, "未获取到当前位置");
         }
@@ -308,6 +340,8 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
 
             case R.id.ll_coordinate: // 获取点坐标
                 ToastUtil.setToast(mContext, "获取点坐标");
+                actionModel = ActionModel.MapPOINT;
+                toolViewModel.getMapPoint(mapView);
                 break;
 
             case R.id.ll_navigation: // 导航
@@ -316,18 +350,25 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
 
             case R.id.ll_attribute: // 属性查询
                 ToastUtil.setToast(mContext, "属性查询");
+                actionModel = ActionModel.IQUERY;
+                toolViewModel.iSercher(mapView);
                 break;
 
             case R.id.ll_distance: // 测量距离
                 ToastUtil.setToast(mContext, "测量距离");
+                actionModel = ActionModel.DISTANCE;
+                toolViewModel.distance(mapView);
                 break;
 
             case R.id.ll_area: // 测量面积
                 ToastUtil.setToast(mContext, "测量面积");
+                actionModel = ActionModel.AREA;
+                toolViewModel.area(mapView);
                 break;
 
             case R.id.ll_clean: // 清除标绘
                 ToastUtil.setToast(mContext, "清除标绘");
+                toolViewModel.clear(mapView);
                 break;
 
             case R.id.ll_layer:
@@ -381,5 +422,34 @@ public class GroundFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
+    }
+
+    @Override
+    public void onSuccess(Object t) {
+
+    }
+
+    @Override
+    public void onFail(String value) {
+
+    }
+
+    @Override
+    public void onGeometry(Geometry geometry) {
+        if(actionModel == ActionModel.DISTANCE){
+            calloutViewModel.showDistance(mapView,geometry);
+        }
+
+        if(actionModel == ActionModel.AREA){
+            calloutViewModel.showDistance(mapView,geometry);
+        }
+
+        if(actionModel == ActionModel.MapPOINT){
+            calloutViewModel.showPoint(mapView,geometry);
+        }
+
+        if(actionModel == ActionModel.IQUERY){
+            toolViewModel.iquery(mapView,geometry,calloutViewModel);
+        }
     }
 }

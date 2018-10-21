@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -9,9 +8,9 @@
         android:id="@+id/mv_inspection"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="48dp"
-        tools:layout_editor_absoluteY="507dp"
-        tools:ignore="MissingConstraints">
+        tools:layout_editor_absoluteY="507dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -23,30 +22,31 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="10dp"
-                android:padding="5dp"
                 android:background="@drawable/bg_text"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:padding="5dp">
 
                 <LinearLayout
                     android:id="@+id/ll_tool"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/background_view_rounded_image"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_tool"/>
+                        android:src="@drawable/ic_tool" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:text="@string/inspection_tool"/>
+                        android:text="@string/inspection_tool"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <View
@@ -54,28 +54,29 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/bg_gray"/>
+                    android:background="@color/bg_gray" />
 
                 <LinearLayout
                     android:id="@+id/ll_layer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/background_view_rounded_image"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_layer"/>
+                        android:src="@drawable/ic_layer" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:text="@string/inspection_layer"/>
+                        android:text="@string/inspection_layer"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <View
@@ -83,28 +84,29 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/bg_gray"/>
+                    android:background="@color/bg_gray" />
 
                 <LinearLayout
                     android:id="@+id/ll_locus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/background_view_rounded_image"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_locus"/>
+                        android:src="@drawable/ic_locus" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:text="@string/inspection_locus"/>
+                        android:text="@string/inspection_locus"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <View
@@ -112,28 +114,29 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/bg_gray"/>
+                    android:background="@color/bg_gray" />
 
                 <LinearLayout
                     android:id="@+id/ll_report"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/background_view_rounded_image"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_report"/>
+                        android:src="@drawable/ic_report" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:text="@string/inspection_report"/>
+                        android:text="@string/inspection_report"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <View
@@ -141,28 +144,29 @@
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:background="@color/bg_gray"/>
+                    android:background="@color/bg_gray" />
 
                 <LinearLayout
                     android:id="@+id/ll_inquire"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:background="@drawable/background_view_rounded_image"
                     android:orientation="vertical">
 
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_inquire"/>
+                        android:src="@drawable/ic_inquire" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_marginTop="2dp"
-                        android:textSize="12sp"
-                        android:text="@string/inspection_inquire"/>
+                        android:text="@string/inspection_inquire"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -174,17 +178,17 @@
                 android:layout_alignParentEnd="true"
                 android:layout_marginTop="90dp"
                 android:layout_marginEnd="70dp"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <ImageView
                 android:id="@+id/iv_location"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
-                android:padding="10dp"
                 android:layout_marginStart="20dp"
                 android:layout_marginBottom="20dp"
-                android:background="@drawable/bg_button_location"
+                android:background="@drawable/background_view_rounded_white"
+                android:padding="10dp"
                 android:src="@drawable/ic_location" />
 
             <TextView
@@ -193,16 +197,59 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/bg_button_location_green"
+                android:drawableStart="@drawable/ic_clock"
+                android:drawablePadding="10dp"
                 android:paddingStart="15dp"
                 android:paddingTop="10dp"
                 android:paddingEnd="15dp"
                 android:paddingBottom="10dp"
-                android:drawableStart="@drawable/ic_clock"
-                android:drawablePadding="10dp"
-                android:layout_marginBottom="20dp"
+                android:text="@string/inspection_start"
+                android:textColor="@color/white" />
+
+            <TextView
+                android:id="@+id/tv_suspend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_toLeftOf="@+id/tv_start"
                 android:background="@drawable/bg_button_location_green"
+                android:padding="10dp"
+                android:text="@string/inspection_suspend"
                 android:textColor="@color/white"
-                android:text="@string/inspection_start"/>
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_restart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginRight="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_toLeftOf="@+id/tv_start"
+                android:background="@drawable/bg_button_location_green"
+                android:padding="10dp"
+                android:text="@string/inspection_restart"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
+            <TextView
+                android:id="@+id/tv_end"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginLeft="20dp"
+                android:layout_marginBottom="30dp"
+                android:layout_toRightOf="@+id/tv_start"
+                android:background="@drawable/bg_button_location_green"
+                android:padding="10dp"
+                android:text="@string/inspection_end"
+                android:textColor="@color/white"
+                android:visibility="gone" />
+
         </RelativeLayout>
     </com.esri.arcgisruntime.mapping.view.MapView>
 </android.support.constraint.ConstraintLayout>

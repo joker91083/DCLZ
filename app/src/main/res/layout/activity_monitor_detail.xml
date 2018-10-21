@@ -191,12 +191,13 @@
                     android:layout_margin="10dp"
                     android:text="@string/monitor_detail_audio"/>
 
-                <ImageView
+                <TextView
                     android:id="@+id/iv_audio"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
-                    android:src="@drawable/ic_audio"/>
+                    android:onClick="setonClick"
+                    android:drawableBottom="@drawable/ic_audio"/>
 
                 <!--<android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_audio"
@@ -212,20 +213,13 @@
                     android:layout_margin="10dp"
                     android:text="@string/monitor_detail_video"/>
 
-                <ImageView
+                <VideoView
                     android:id="@+id/iv_video"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:padding="5dp"
+                    android:onClick="setonClick"
                     android:src="@drawable/ic_video"/>
-
-                <!--<android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_video"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginBottom="10dp"/>-->
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -240,6 +234,7 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="10dp"
+                        android:onClick="setonClick"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="5dp"
@@ -255,11 +250,12 @@
                         android:layout_weight="1"
                         android:gravity="center"
                         android:padding="10dp"
+                        android:onClick="setonClick"
                         android:layout_marginStart="5dp"
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@drawable/bg_button_orange"
+                        android:background="@drawable/background_view_rounded_orange"
                         android:textColor="@color/white"
                         android:text="@string/monitor_detail_report"/>
                 </LinearLayout>

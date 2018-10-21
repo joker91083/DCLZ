@@ -9,9 +9,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.otitan.dclz.R;
-import com.otitan.dclz.bean.Patrol;
+import com.otitan.dclz.bean.EventReport;
 
+import java.util.ArrayList;
 import java.util.List;
+
 
 /**
  * Created by sp on 2018/9/28.
@@ -20,13 +22,13 @@ import java.util.List;
 public class MonitorAdapter extends RecyclerView.Adapter<MonitorAdapter.MyViewHolder> {
 
     private Context mContext;
-    private List<Patrol> mDatas;
+    private List<EventReport> mDatas = new ArrayList<>();
 
     private MyItemClickListener mItemClickListener;
 
-    public MonitorAdapter(Context context, List<Patrol> datas) {
+    public MonitorAdapter(Context context, List<EventReport> datas) {
         mContext = context;
-        mDatas = datas;
+        mDatas.addAll(datas);
     }
 
     @Override
@@ -41,11 +43,15 @@ public class MonitorAdapter extends RecyclerView.Adapter<MonitorAdapter.MyViewHo
         holder.mTv_name.setText(mDatas.get(position).getXJ_SBBH());
         holder.mTv_time.setText(mDatas.get(position).getXJ_SCRQ());
 
-        holder.mTv_status.setTextColor(Color.parseColor("#4CAF50")); // 已上报
-        holder.mTv_status.setText("已上报");
+        Long lid = mDatas.get(position).getLID();
+        if(lid != null){
+            holder.mTv_status.setTextColor(Color.parseColor("#fc6f30")); // 未上报
+            holder.mTv_status.setText("未上报");
+        }else{
+            holder.mTv_status.setTextColor(Color.parseColor("#4CAF50")); // 已上报
+            holder.mTv_status.setText("已上报");
+        }
 
-        /*holder.mTv_status.setTextColor(Color.parseColor("#fc6f30")); // 未上报
-        holder.mTv_status.setText("未上报");*/
     }
 
     @Override

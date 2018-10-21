@@ -14,9 +14,11 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.otitan.dclz.Myapplication;
 import com.otitan.dclz.R;
 import com.otitan.dclz.activity.MonitorDetailActivity;
 import com.otitan.dclz.adapter.MonitorAdapter;
+import com.otitan.dclz.bean.EventReport;
 import com.otitan.dclz.bean.Patrol;
 import com.otitan.dclz.net.RetrofitHelper;
 import com.titan.baselibrary.util.MobileInfoUtil;
@@ -25,9 +27,12 @@ import com.titan.baselibrary.util.ToastUtil;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.objectbox.Box;
+import io.objectbox.query.QueryBuilder;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -93,21 +98,36 @@ public class MonitorFragment extends Fragment {
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    ArrayList<Patrol> list = new Gson().fromJson(s, new TypeToken<ArrayList<Patrol>>() {}.getType());
-                    mRv_monitor.setLayoutManager(new LinearLayoutManager(mContext));
-                    MonitorAdapter adapter = new MonitorAdapter(mContext, list);
-                    mRv_monitor.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
-                    mRv_monitor.setAdapter(adapter);
+                    ArrayList<EventReport> list = new Gson().fromJson(s, new TypeToken<ArrayList<EventReport>>() {}.getType());
 
-                    adapter.setItemClickListener(new MonitorAdapter.MyItemClickListener() {
-                        @Override
-                        public void onItemClick(View view, int position) {
-                            startActivity(new Intent(mContext, MonitorDetailActivity.class));
-                        }
-                    });
+                    initReportAdapter(list);
+
                 } else {
-
+                    ToastUtil.setToast(mContext,"数据解析错误");
                 }
+            }
+        });
+    }
+
+    private void initReportAdapter(ArrayList<EventReport> list){
+        ArrayList<EventReport> arrayList = new ArrayList<>();
+        arrayList.addAll(list);
+
+        Box<EventReport> reportBox = Myapplication.getBoxstore().boxFor(EventReport.class);
+        QueryBuilder<EventReport> query = reportBox.query();
+        List<EventReport> local = query.build().find();
+
+        arrayList.addAll(local);
+
+        mRv_monitor.setLayoutManager(new LinearLayoutManager(mContext));
+        MonitorAdapter adapter = new MonitorAdapter(mContext, arrayList);
+        mRv_monitor.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
+        mRv_monitor.setAdapter(adapter);
+
+        adapter.setItemClickListener(new MonitorAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                startActivity(new Intent(mContext, MonitorDetailActivity.class));
             }
         });
     }

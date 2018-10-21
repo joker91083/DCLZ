@@ -73,6 +73,9 @@
     <string name="inspection_report">事件上报</string>
     <string name="inspection_inquire">事件查询</string>
     <string name="inspection_start">开始记录</string>
+    <string name="inspection_suspend">暂停</string>
+    <string name="inspection_end">结束</string>
+    <string name="inspection_restart">继续</string>
 
     <!--工具-->
     <string name="tool_coordinate">获取点坐标</string>
