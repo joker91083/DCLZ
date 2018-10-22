@@ -26,4 +26,16 @@
         <item name="android:textColor">@drawable/rb_focus_color</item>
         <item name="android:textSize">12sp</item>
     </style>
+
+    <!--dialog样式-->
+    <style name="style_Dialog" parent="android:style/Theme.Dialog">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <!--是否允许背景变暗-->
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--false, 默认将Window设置成全屏大小，设置为true，则window大小为wrap_content-->
+        <item name="android:windowIsFloating">true</item>
+        <!--除去title-->
+        <item name="android:windowNoTitle">true</item>
+    </style>
 </resources>

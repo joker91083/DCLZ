@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.NavigationActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_gray"
+        android:focusableInTouchMode="true">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/tb_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/iv_back"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:text="@string/navigation_title" />
+        </android.support.v7.widget.Toolbar>
+
+        <LinearLayout
+            android:id="@+id/ll_start"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tb_title"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/navigation_start"/>
+
+            <EditText
+                android:id="@+id/et_start"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/navigation_start_hint"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ll_start"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:text="@string/navigation_end"/>
+
+            <EditText
+                android:id="@+id/et_end"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/navigation_end_hint"/>
+        </LinearLayout>
+
+        <com.baidu.mapapi.map.MapView
+            android:id="@+id/mv_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/ll_end"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_navigation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/bg_text"
+            android:layout_below="@+id/ll_end"/>
+
+        <ImageView
+            android:id="@+id/iv_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:padding="10dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button_location_storke"
+            android:src="@drawable/ic_location" />
+
+        <TextView
+            android:id="@+id/tv_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:paddingStart="15dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="15dp"
+            android:paddingBottom="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button_location_green"
+            android:textColor="@color/white"
+            android:text="@string/navigation_nav"/>
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

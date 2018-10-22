@@ -27,7 +27,7 @@ import butterknife.ButterKnife;
 /**
  * 主页
  */
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener, HomeFragment.OnHeadlineSelectedListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener, HomeFragment.OnHeadlineSelectedListener, InspectionFragment.OnHeadlineSelectedListener {
 
     @BindView(R.id.vp_main)
     NoScrollViewPager mVp_main;
@@ -163,6 +163,10 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             case "2":
                 mRb_ground.setChecked(true);
                 mVp_main.setCurrentItem(2, false);
+                break;
+            case "5":
+                mRb_monitor.setChecked(true);
+                mVp_main.setCurrentItem(5, false);
                 break;
         }
 

@@ -19,6 +19,10 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <!-- 录音 -->
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <!-- 百度定位 -->
+    <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
+    <!-- 获取运营商信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-permission android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
@@ -33,17 +37,25 @@
         tools:ignore="GoogleAppIndexingWarning">
 
         <meta-data
+            android:name="com.baidu.speech.APP_ID"
+            android:value="14460066" />
+
+        <meta-data
+            android:name="com.baidu.speech.SECRET_KEY"
+            android:value="gobpHha2qXLCbH1n2KKYssFqxmPc7Wio" />
+
+        <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="3EwhfxFaWdFtK3YUMGdwesdA0QVk9NgZ" />
+            android:value="w9LapuDC7lnu25anSTd2q7YrA89obLGh" />
 
         <service
             android:name="com.baidu.location.f"
             android:enabled="true"
-            android:process=":remote"/>
+            android:process=":remote" />
 
         <activity
             android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait"> <!-- 限制此页面数竖屏显示 -->
+            android:screenOrientation="portrait"> <!-- 限制此页面竖屏显示 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -52,18 +64,29 @@
         </activity>
 
         <!-- 主页 -->
-        <activity android:name=".MainActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <!-- 事件详情 -->
-        <activity android:name=".activity.MonitorDetailActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".activity.MonitorDetailActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <!-- 个人中心 -->
-        <activity android:name=".activity.UserActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
+        <activity
+            android:name=".activity.UserActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
         <!-- 修改密码 -->
-        <activity android:name=".activity.ChangePassActivity"
-            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"/>
-
+        <activity
+            android:name=".activity.ChangePassActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <!--导航-->
+        <activity
+            android:name=".activity.NavigationActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <!--百度导航-->
+        <activity
+            android:name=".activity.BNaviGuideActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
     </application>
 
 </manifest>

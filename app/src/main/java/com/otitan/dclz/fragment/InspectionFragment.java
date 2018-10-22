@@ -1,5 +1,6 @@
 package com.otitan.dclz.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,6 +14,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.baidu.location.BDAbstractLocationListener;
+import com.baidu.location.BDLocation;
+import com.baidu.location.LocationClient;
+import com.baidu.location.LocationClientOption;
 import com.esri.arcgisruntime.data.TileCache;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
@@ -28,9 +33,10 @@ import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.mapping.view.SketchEditor;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
-import com.otitan.dclz.Myapplication;
+import com.otitan.dclz.LayerControlDialog;
 import com.otitan.dclz.R;
 import com.otitan.dclz.activity.MonitorDetailActivity;
+import com.otitan.dclz.activity.NavigationActivity;
 import com.otitan.dclz.bean.ActionModel;
 import com.otitan.dclz.bean.Trajectory;
 import com.otitan.dclz.common.CalloutViewModel;
@@ -52,6 +58,7 @@ import java.util.UUID;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.Unbinder;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -107,6 +114,11 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
 
     private Point gpspoint;
     private Point mappoint;
+    private Unbinder unbinder;
+
+    private HomeFragment.OnHeadlineSelectedListener mCallback;
+
+    private Point currentPoint;
     private boolean isFirst = true;
     private int iTool = 0;
     private String address = "";
@@ -130,7 +142,8 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_inspection, null);
-        ButterKnife.bind(this, inflate);
+//        ButterKnife.bind(this, inflate);
+        unbinder = ButterKnife.bind(this, inflate);
 
         mContext = InspectionFragment.this.getContext();
 
@@ -144,6 +157,7 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
     private void initView() {
         initMap();
         initLocation();
+        bdLocation();
 
         // 定位
         mIv_location.setOnClickListener(this);
@@ -221,7 +235,50 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         // 定位显示
         mLocDisplay.startAsync();
         // 设置位置变化监听
-        mLocDisplay.addLocationChangedListener(new MyLocationChangedListener(mLocDisplay));
+        mLocDisplay.addLocationChangedListener(new MyLocationChangedListener(mLocDisplay) {
+            @Override
+            public void onLocationChanged(LocationDisplay.LocationChangedEvent locationChangedEvent) {
+                // 当前坐标点
+                gpspoint = locationChangedEvent.getLocation().getPosition();
+                mappoint = mLocDisplay.getMapLocation();
+
+                if (isFirst && mappoint != null) {
+                    myLocation();
+                    isFirst = false;
+                }
+
+
+                record();
+            }
+        });
+    }
+
+    /**
+     * 百度定位
+     */
+    private void bdLocation() {
+        LocationClient locationClient = new LocationClient(mContext);
+        LocationClientOption clientOption = new LocationClientOption();
+        clientOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy); // 设置定位模式（高精度）
+        clientOption.openGps = true; // 打开GPS
+        clientOption.setCoorType("bd09ll"); // 设置坐标系 bd09ll gcj02
+        clientOption.setScanSpan(5000); // 定位回掉时间(毫秒)
+        clientOption.setIsNeedAddress(true); // 获取具体位置
+        locationClient.setLocOption(clientOption);
+        // 注册位置监听器
+        locationClient.registerLocationListener(new BDAbstractLocationListener() {
+            @Override
+            public void onReceiveLocation(BDLocation bdLocation) {
+                if (bdLocation != null) {
+                    double longitude = bdLocation.getLongitude(); // 经度
+                    double latitude = bdLocation.getLatitude(); // 纬度
+
+                    // 当前地址
+//                    myAddress = bdLocation.getAddrStr();
+                }
+            }
+        });
+        locationClient.start();
     }
 
     /**
@@ -253,7 +310,8 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_layer: // 图层控制
-                ToastUtil.setToast(mContext, "图层控制");
+                LayerControlDialog lcDialog = new LayerControlDialog(mContext, R.style.style_Dialog, mapview);
+                lcDialog.show();
                 break;
 
             case R.id.ll_locus: // 轨迹查询
@@ -281,7 +339,7 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_navigation: // 导航
-                ToastUtil.setToast(mContext, "导航");
+                startActivity(new Intent(mContext, NavigationActivity.class));
                 break;
 
             case R.id.ll_attribute: // 属性查询
@@ -441,86 +499,102 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    class MyLocationChangedListener implements LocationDisplay.LocationChangedListener {
+    abstract class MyLocationChangedListener implements LocationDisplay.LocationChangedListener {
         LocationDisplay mLocDisplay;
 
         public MyLocationChangedListener(LocationDisplay locationDisplay) {
             this.mLocDisplay = locationDisplay;
         }
+    }
 
-        @Override
-        public void onLocationChanged(LocationDisplay.LocationChangedEvent event) {
+    // fragment 的上一级 activtiy 实现这个接口
+    public interface OnHeadlineSelectedListener {
+        void onArticleSelected(String s);
+    }
 
-            // 当前坐标点
-            gpspoint = event.getLocation().getPosition();
-            mappoint = mLocDisplay.getMapLocation();
-
-            if (isFirst && mappoint != null) {
-                myLocation();
-                isFirst = false;
-            }
-
-
-            record();
-
-        }
-
-
-        /*记录轨迹*/
-        private void record() {
-            if (!isStart) {
-                return;
-            }
-
-            overlay.getGraphics().remove(lineGraphic);
-            collection.add(mappoint);
-            polyline = new Polyline(collection);
-            lineGraphic = new Graphic(polyline, lineSymbol);
-            overlay.getGraphics().add(lineGraphic);
-
-            boolean netState = RetrofitHelper.getInstance(mContext).networkMonitor.isConnected();
-            if(netState){
-                uPLonLat();
-            }else{
-                ToastUtil.setToast(mContext,"网络未连接");
-            }
-
-        }
-
-        /*上传轨迹点*/
-        private void uPLonLat() {
-            String SBH = MobileUtil.getInstance().getMacAdress(mContext);
-            String lon = ConverterUtils.toString(gpspoint.getX());
-            String lat = ConverterUtils.toString(gpspoint.getY());
-            String time = Constant.dateFormat.format(new Date());
-
-            Observable<String> oberver = RetrofitHelper.getInstance(mContext).getServer().uPLonLat(SBH, lon, lat, time);
-            oberver.subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Observer<String>() {
-                        @Override
-                        public void onCompleted() {
-
-                        }
-
-                        @Override
-                        public void onError(Throwable throwable) {
-                            ToastUtil.setToast(mContext, "轨迹点上传异常" + throwable.getMessage());
-                            uPLonLat();
-                        }
-
-                        @Override
-                        public void onNext(String s) {
-                            if (s.equals("0")) {
-                                //成功
-                            } else if (s.equals("1")) {
-                                //失败
-                            } else if (s.equals("2")) {
-                                //设备未注册
-                            }
-                        }
-                    });
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        // 这是为了保证Activity容器实现了用以回调的接口。如果没有，它会抛出一个异常。
+        try {
+//            mCallback = (OnHeadlineSelectedListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString()
+                    + " must implement OnHeadlineSelectedListener");
         }
     }
 
+    /*@Override
+    public void onLocationChanged(LocationDisplay.LocationChangedEvent event) {
+
+        // 当前坐标点
+        gpspoint = event.getLocation().getPosition();
+        mappoint = mLocDisplay.getMapLocation();
+
+        if (isFirst && mappoint != null) {
+            myLocation();
+            isFirst = false;
+        }
+
+
+        record();
+
+    }*/
+
+
+    /*记录轨迹*/
+    private void record() {
+        if (!isStart) {
+            return;
+        }
+
+        overlay.getGraphics().remove(lineGraphic);
+        collection.add(mappoint);
+        polyline = new Polyline(collection);
+        lineGraphic = new Graphic(polyline, lineSymbol);
+        overlay.getGraphics().add(lineGraphic);
+
+        boolean netState = RetrofitHelper.getInstance(mContext).networkMonitor.isConnected();
+        if(netState){
+            uPLonLat();
+        }else{
+            ToastUtil.setToast(mContext,"网络未连接");
+        }
+
+    }
+
+    /*上传轨迹点*/
+    private void uPLonLat() {
+        String SBH = MobileUtil.getInstance().getMacAdress(mContext);
+        String lon = ConverterUtils.toString(gpspoint.getX());
+        String lat = ConverterUtils.toString(gpspoint.getY());
+        String time = Constant.dateFormat.format(new Date());
+
+        Observable<String> oberver = RetrofitHelper.getInstance(mContext).getServer().uPLonLat(SBH, lon, lat, time);
+        oberver.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<String>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable throwable) {
+                        ToastUtil.setToast(mContext, "轨迹点上传异常" + throwable.getMessage());
+                        uPLonLat();
+                    }
+
+                    @Override
+                    public void onNext(String s) {
+                        if (s.equals("0")) {
+                            //成功
+                        } else if (s.equals("1")) {
+                            //失败
+                        } else if (s.equals("2")) {
+                            //设备未注册
+                        }
+                    }
+                });
+    }
 }

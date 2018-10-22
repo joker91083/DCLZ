@@ -85,6 +85,19 @@
     <string name="tool_area">测量面积</string>
     <string name="tool_clean">清除标绘</string>
 
+    <!--图层-->
+    <string name="layer_title">图层</string>
+    <string name="layer_base">基础图</string>
+    <string name="layer_image">影像图</string>
+
+    <!--导航-->
+    <string name="navigation_title">导航</string>
+    <string name="navigation_start">起点</string>
+    <string name="navigation_end">终点</string>
+    <string name="navigation_start_hint">输入起点</string>
+    <string name="navigation_end_hint">输入终点</string>
+    <string name="navigation_nav">开始导航</string>
+
     <!--监测周报-->
     <string name="monitor_title">事件列表</string>
 

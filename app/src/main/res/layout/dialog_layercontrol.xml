@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/gray"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
+            android:background="@color/colorPrimary">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:text="@string/satellite_layer" />
+
+            <ImageView
+                android:id="@+id/iv_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/ic_close_white"/>
+        </RelativeLayout>
+
+        <RadioGroup
+            android:id="@+id/rg_layer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/rb_base"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:padding="10dp"
+                android:gravity="center"
+                android:button="@null"
+                android:background="@drawable/bg_button_top"
+                android:textColor="@color/balck"
+                android:text="@string/layer_base"/>
+
+            <RadioButton
+                android:id="@+id/rb_image"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="10dp"
+                android:gravity="center"
+                android:button="@null"
+                android:background="@drawable/bg_button_top"
+                android:textColor="@color/balck"
+                android:text="@string/layer_image"/>
+        </RadioGroup>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_layer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/colorPrimary"/>
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>
