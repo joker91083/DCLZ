@@ -35,8 +35,8 @@ import com.titan.baselibrary.util.ConverterUtils;
 import com.titan.baselibrary.util.ProgressDialogUtil;
 import com.titan.baselibrary.util.ToastUtil;
 import com.titan.baselibrary.util.Util;
-import com.titan.medialibrary.activity.AudioRecorderActivity;
-import com.titan.medialibrary.activity.VideoRecorderActivity;
+//import com.titan.medialibrary.activity.AudioRecorderActivity;
+//import com.titan.medialibrary.activity.VideoRecorderActivity;
 
 import java.io.File;
 import java.util.ArrayList;
