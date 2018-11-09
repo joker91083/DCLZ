@@ -1,7 +1,6 @@
 package com.otitan.dclz.common;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 
 import com.otitan.dclz.Myapplication;
@@ -33,7 +32,7 @@ public class EventReportModel {
 
                     @Override
                     public void onError(Throwable throwable) {
-                        ToastUtil.setToast(activity,"网络连接错误");
+                        ToastUtil.setToast(activity,"网络连接错误"+throwable.getMessage());
                         ProgressDialogUtil.stopProgressDialog(activity);
                     }
 

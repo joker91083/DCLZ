@@ -38,8 +38,6 @@ public class TrajectoryModel implements ITrajectoryModel {
                     public void onNext(String s) {
                         if(s.equals("true") && trajectory.getXC_ENDTIME().equals("")){
                             //返回巡查路线ID
-                            String id = trajectory.getXC_ID();
-                            trajectory.setXC_ID(id);
                             callback.onSuccess(trajectory);
 
                         }else if(s.equals("true") && !trajectory.getXC_ENDTIME().equals("")){

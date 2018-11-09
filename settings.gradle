@@ -1,4 +1,4 @@
-include ':app', ':onsdk_all', ':NaviTts'
+include ':app'
 include ':LibraryManager'
 project(':LibraryManager').projectDir = new File('../LibraryManager/')
 include ':LibraryManager:baselibrary'

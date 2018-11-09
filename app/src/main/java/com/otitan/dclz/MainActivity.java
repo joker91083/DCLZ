@@ -3,6 +3,7 @@ package com.otitan.dclz;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioButton;
@@ -27,7 +28,7 @@ import butterknife.ButterKnife;
 /**
  * 主页
  */
-public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener, HomeFragment.OnHeadlineSelectedListener, InspectionFragment.OnHeadlineSelectedListener {
+public class MainActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener, RadioGroup.OnCheckedChangeListener, HomeFragment.OnHeadlineSelectedListener {
 
     @BindView(R.id.vp_main)
     NoScrollViewPager mVp_main;
@@ -154,24 +155,25 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
     }
 
     @Override
-    public void onArticleSelected(String s) {
+    public void onArticleSelected(String s,String time) {
+        PagerAdapter adapter = mVp_main.getAdapter();
         switch (s) {
             case "1":
                 mRb_satellite.setChecked(true);
                 mVp_main.setCurrentItem(1, false);
+                SatelliteFragment sFragment = (SatelliteFragment) adapter.instantiateItem(mVp_main, 1);
+                sFragment.getActivityTime(s,time);
                 break;
             case "2":
                 mRb_ground.setChecked(true);
                 mVp_main.setCurrentItem(2, false);
+                GroundFragment groundFragment = (GroundFragment)adapter.instantiateItem(mVp_main,2);
+                groundFragment.getHomeTime(s,time);
                 break;
             case "5":
                 mRb_monitor.setChecked(true);
                 mVp_main.setCurrentItem(5, false);
                 break;
         }
-
-        /*PagerAdapter adapter = mVp_main.getAdapter();
-        SatelliteFragment sFragment = (SatelliteFragment) adapter.instantiateItem(mVp_main, 1);
-        sFragment.getData(s);*/
     }
 }

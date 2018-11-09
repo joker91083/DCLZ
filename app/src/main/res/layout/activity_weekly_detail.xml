@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/gray_bg"
+    tools:context=".activity.WeeklyDetailActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/weeklydetailclose"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:onClick="onclick"
+                android:background="@drawable/background_view_rounded_image"
+                android:padding="8dp"
+                android:src="@drawable/ic_back" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="周报详细信息"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+
+        </android.support.v7.widget.Toolbar>
+
+        <TextView
+            android:id="@+id/weekly_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="标题" />
+
+        <TextView
+            android:id="@+id/weekly_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="类型" />
+
+        <TextView
+            android:id="@+id/weekly_author"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:text="生成人" />
+
+        <TextView
+            android:id="@+id/weekly_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="生成时间" />
+
+        <TextView
+            android:id="@+id/weekly_year"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="年份" />
+
+        <TextView
+            android:id="@+id/weekly_stage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:visibility="gone"
+            android:text="期数" />
+
+        <TextView
+            android:id="@+id/weekly_startdate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="开始时间" />
+
+        <TextView
+            android:id="@+id/weekly_enddate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@color/white"
+            android:padding="8dp"
+            android:text="结束时间" />
+
+        <TextView
+            android:id="@+id/weekly_file"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|left"
+            android:layout_marginTop="3dp"
+            android:background="@drawable/background_view_rounded_orange"
+            android:padding="8dp"
+            android:textColor="@color/white"
+            android:text="周报文件" />
+
+
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

@@ -22,7 +22,10 @@
                 android:id="@+id/iv_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_back" />
+                android:src="@drawable/ic_back"
+                android:padding="8dp"
+                android:background="@drawable/background_view_rounded_image"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -234,7 +237,7 @@
                         android:layout_marginRight="10dp"
                         android:gravity="center"
                         android:padding="15dp"
-                        android:background="@drawable/bg_text"
+                        android:background="@drawable/background_view_rounded_white"
                         android:textSize="18sp"
                         android:text="@string/user_change" />
 
@@ -247,7 +250,7 @@
                         android:layout_marginRight="20dp"
                         android:gravity="center"
                         android:padding="15dp"
-                        android:background="@drawable/bg_text"
+                        android:background="@drawable/background_view_rounded_white"
                         android:textSize="18sp"
                         android:text="@string/user_check"/>
                 </LinearLayout>

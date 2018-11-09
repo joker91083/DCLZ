@@ -61,6 +61,7 @@
     <!--卫星遥感-->
     <string name="satellite_tool">工具</string>
     <string name="satellite_layer">图层</string>
+    <string name="layers">图层控制</string>
 
     <!--地基遥感-->
     <string name="ground_tool">工具</string>
@@ -78,8 +79,8 @@
     <string name="inspection_restart">继续</string>
 
     <!--工具-->
-    <string name="tool_coordinate">获取点坐标</string>
-    <string name="tool_navigation">导航</string>
+    <string name="tool_coordinate">拾取坐标</string>
+    <string name="tool_navigation">在线导航</string>
     <string name="tool_attribute">属性查询</string>
     <string name="tool_distance">测量距离</string>
     <string name="tool_area">测量面积</string>
@@ -99,8 +100,9 @@
     <string name="navigation_nav">开始导航</string>
 
     <!--监测周报-->
-    <string name="monitor_title">事件列表</string>
-
+    <string name="monitor_title">周报列表</string>
+    <string name="event_title">事件列表</string>
+    <string name="event_detail_title">事件详细信息</string>
     <!--事件上报-->
     <string name="monitor_detail_title">事件上报</string>
     <string name="monitor_detail_name">事件名称</string>
@@ -124,6 +126,10 @@
     <string name="World_Imagery">http://services.arcgisonline.com/arcgis/rest/services/World_Imagery/MapServer</string>
     <string name="World_Street_Map">http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer</string>
 
+    <!--水花影像-->
+    <string name="shui_imager">http://106.74.18.36:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>
+    <!--内网影像-->
+    <!--<string name="shui_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>-->
     <!--云服务-->
     <string name="serverhost">http://101.201.54.143:5830/</string>
     <!--客户内网-->

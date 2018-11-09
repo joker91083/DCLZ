@@ -2,11 +2,13 @@ package com.otitan.dclz.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,45 +16,52 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.baidu.location.BDAbstractLocationListener;
-import com.baidu.location.BDLocation;
-import com.baidu.location.LocationClient;
-import com.baidu.location.LocationClientOption;
-import com.esri.arcgisruntime.data.TileCache;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.navi.AmapNaviPage;
+import com.amap.api.navi.AmapNaviParams;
+import com.amap.api.navi.AmapNaviType;
+import com.amap.api.navi.INaviInfoCallback;
+import com.amap.api.navi.model.AMapNaviLocation;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.PointCollection;
 import com.esri.arcgisruntime.geometry.Polyline;
-import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
-import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
+import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.mapping.view.SketchEditor;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
-import com.otitan.dclz.LayerControlDialog;
 import com.otitan.dclz.R;
 import com.otitan.dclz.activity.MonitorDetailActivity;
 import com.otitan.dclz.activity.NavigationActivity;
+import com.otitan.dclz.activity.QueryEventActivity;
 import com.otitan.dclz.bean.ActionModel;
+import com.otitan.dclz.bean.TrackPoint;
 import com.otitan.dclz.bean.Trajectory;
 import com.otitan.dclz.common.CalloutViewModel;
 import com.otitan.dclz.common.GeometryChangedListener;
 import com.otitan.dclz.common.ITrajectoryModel;
+import com.otitan.dclz.common.LocationSource;
+import com.otitan.dclz.common.LocationSourceImpl;
 import com.otitan.dclz.common.MyMapViewOnTouchListener;
 import com.otitan.dclz.common.ToolViewModel;
 import com.otitan.dclz.common.TrajectoryModel;
 import com.otitan.dclz.common.ValueCallback;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.otitan.dclz.net.local.LocalDataSource;
+import com.otitan.dclz.net.local.LocalDataSourceImpl;
 import com.otitan.dclz.util.Constant;
 import com.otitan.dclz.util.MobileUtil;
 import com.titan.baselibrary.util.ConverterUtils;
 import com.titan.baselibrary.util.ToastUtil;
 
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 import butterknife.BindView;
@@ -68,7 +77,7 @@ import rx.schedulers.Schedulers;
  * Created by sp on 2018/9/25.
  * 移动巡检
  */
-public class InspectionFragment extends Fragment implements View.OnClickListener, ValueCallback {
+public class InspectionFragment extends BaseFragment implements View.OnClickListener, ValueCallback {
 
     @BindView(R.id.mv_inspection)
     MapView mapview;
@@ -118,7 +127,6 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
 
     private HomeFragment.OnHeadlineSelectedListener mCallback;
 
-    private Point currentPoint;
     private boolean isFirst = true;
     private int iTool = 0;
     private String address = "";
@@ -138,6 +146,12 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
     private ITrajectoryModel trajectoryModel = null;
     private Trajectory trajectory = null;
 
+    private LocalDataSource localDataSource;
+    private String macAddress = "";
+
+    private GdlocationListener gdlocationListener = new GdlocationListener();
+    private AMapLocationClient gdClient = null;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -145,11 +159,11 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
 //        ButterKnife.bind(this, inflate);
         unbinder = ButterKnife.bind(this, inflate);
 
-        mContext = InspectionFragment.this.getContext();
-
-        initView();
+        mContext = this.getActivity();
 
         initViewModel();
+
+        initView();
 
         return inflate;
     }
@@ -157,7 +171,7 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
     private void initView() {
         initMap();
         initLocation();
-        bdLocation();
+        initGdlocation();
 
         // 定位
         mIv_location.setOnClickListener(this);
@@ -202,11 +216,12 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
      * 初始化地图
      */
     private void initMap() {
-        ArcGISMap arcGISMap = new ArcGISMap(Basemap.createImagery());
-        TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
-        ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
-        arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
-        mapview.setMap(arcGISMap);
+//        ArcGISMap arcGISMap = new ArcGISMap(Basemap.createImagery());
+//        TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
+//        ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
+//        arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
+//        mapview.setMap(arcGISMap);
+        toolViewModel.addStreetLayer(mapview);
 
         // 去除下方 powered by esri 按钮
         mapview.setAttributionTextVisible(false);
@@ -215,12 +230,6 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         SketchEditor sketchEditor = new SketchEditor();
         sketchEditor.addGeometryChangedListener(new GeometryChangedListener(this, mapview));
         mapview.setSketchEditor(sketchEditor);
-
-        View.OnTouchListener lo = mapview.getOnTouchListener();
-        if (null != lo) {
-            touchListener = new MyMapViewOnTouchListener(mapview.getContext(), mapview, lo, this);
-            mapview.setOnTouchListener(touchListener);
-        }
 
     }
 
@@ -242,53 +251,33 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 gpspoint = locationChangedEvent.getLocation().getPosition();
                 mappoint = mLocDisplay.getMapLocation();
 
-                if (isFirst && mappoint != null) {
-                    myLocation();
+                if (isFirst && gpspoint != null) {
+                    toolViewModel.zoomToMylocation(mContext,mapview,gpspoint);
                     isFirst = false;
                 }
-
 
                 record();
             }
         });
     }
 
-    /**
-     * 百度定位
-     */
-    private void bdLocation() {
-        LocationClient locationClient = new LocationClient(mContext);
-        LocationClientOption clientOption = new LocationClientOption();
-        clientOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy); // 设置定位模式（高精度）
-        clientOption.openGps = true; // 打开GPS
-        clientOption.setCoorType("bd09ll"); // 设置坐标系 bd09ll gcj02
-        clientOption.setScanSpan(5000); // 定位回掉时间(毫秒)
-        clientOption.setIsNeedAddress(true); // 获取具体位置
-        locationClient.setLocOption(clientOption);
-        // 注册位置监听器
-        locationClient.registerLocationListener(new BDAbstractLocationListener() {
-            @Override
-            public void onReceiveLocation(BDLocation bdLocation) {
-                if (bdLocation != null) {
-                    double longitude = bdLocation.getLongitude(); // 经度
-                    double latitude = bdLocation.getLatitude(); // 纬度
 
-                    // 当前地址
-//                    myAddress = bdLocation.getAddrStr();
-                }
-            }
-        });
-        locationClient.start();
+    /*初始化高德定位*/
+    private void initGdlocation(){
+        LocationSource locationSource = new LocationSourceImpl();
+
+        gdClient = locationSource.initGdlocation(mContext,gdClient,gdlocationListener,null);
     }
 
-    /**
-     * 当前位置
-     */
-    private void myLocation() {
-        if (mappoint != null) {
-            mapview.setViewpointCenterAsync(mappoint, 5000);
-        } else {
-            ToastUtil.setToast(mContext, "未获取到当前位置");
+    class GdlocationListener implements AMapLocationListener{
+
+        @Override
+        public void onLocationChanged(AMapLocation location) {
+            if(null == location){
+                return;
+            }
+
+            address = location.getAddress();
         }
     }
 
@@ -296,7 +285,7 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_location: // 定位
-                myLocation();
+                toolViewModel.zoomToMylocation(mContext,mapview,gpspoint);
                 break;
 
             case R.id.ll_tool: // 工具
@@ -310,17 +299,20 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_layer: // 图层控制
-                LayerControlDialog lcDialog = new LayerControlDialog(mContext, R.style.style_Dialog, mapview);
-                lcDialog.show();
+                toolViewModel.showLayer(mContext,mapview,gpspoint);
                 break;
 
             case R.id.ll_locus: // 轨迹查询
-                ToastUtil.setToast(mContext, "轨迹查询");
+                queryPoint();
                 break;
 
             case R.id.ll_report: // 事件上报
                 Intent intent = new Intent(mContext, MonitorDetailActivity.class);
                 Bundle bundle = new Bundle();
+                if(gpspoint == null){
+                    ToastUtil.setToast(mContext,"请等待获取位置成功后上传事件数据");
+                    return;
+                }
                 bundle.putString("X", ConverterUtils.toString(gpspoint.getX()));
                 bundle.putString("Y", ConverterUtils.toString(gpspoint.getY()));
                 bundle.putString("address", address);
@@ -329,7 +321,8 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_inquire: // 事件查询
-                ToastUtil.setToast(mContext, "事件查询");
+                Intent query = new Intent(mContext,QueryEventActivity.class);
+                startActivity(query);
                 break;
 
             case R.id.ll_coordinate: // 获取点坐标
@@ -339,7 +332,8 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                 break;
 
             case R.id.ll_navigation: // 导航
-                startActivity(new Intent(mContext, NavigationActivity.class));
+                //startActivity(new Intent(mContext, NavigationActivity.class));
+                toolViewModel.navigation(mContext,this);
                 break;
 
             case R.id.ll_attribute: // 属性查询
@@ -389,6 +383,8 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
 
     /*开始记录*/
     private void start() {
+        macAddress = MobileUtil.getInstance().getMacAdress(mContext);
+        localDataSource = new LocalDataSourceImpl();
         isStart = true;
         actionModel = ActionModel.RECODE;
 
@@ -416,11 +412,30 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         trajectory.setXC_STARTTIME(startime);
         trajectory.setXC_METHOD("0");
         trajectory.setXC_XLLC("");
-        trajectory.setXC_NAME("");
+        trajectory.setXC_NAME(startime);
         trajectory.setXC_ENDTIME("");
         trajectory.setREMARK("");
 
         trajectoryModel.sendTrajectory(mContext, trajectory, this);
+
+        /*本地轨迹记录保存*/
+        localDataSource = new LocalDataSourceImpl();
+        localDataSource.saveTrajectory(trajectory, new ValueCallback() {
+            @Override
+            public void onSuccess(Object t) {
+                ToastUtil.setToast(mContext,t.toString());
+            }
+
+            @Override
+            public void onFail(String value) {
+                ToastUtil.setToast(mContext,value);
+            }
+
+            @Override
+            public void onGeometry(Geometry geometry) {
+
+            }
+        });
 
     }
 
@@ -477,7 +492,7 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onFail(String value) {
-
+        ToastUtil.setToast(mContext,value);
     }
 
     @Override
@@ -507,40 +522,17 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    // fragment 的上一级 activtiy 实现这个接口
-    public interface OnHeadlineSelectedListener {
-        void onArticleSelected(String s);
-    }
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         // 这是为了保证Activity容器实现了用以回调的接口。如果没有，它会抛出一个异常。
         try {
-//            mCallback = (OnHeadlineSelectedListener) activity;
+            mCallback = (HomeFragment.OnHeadlineSelectedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnHeadlineSelectedListener");
         }
     }
-
-    /*@Override
-    public void onLocationChanged(LocationDisplay.LocationChangedEvent event) {
-
-        // 当前坐标点
-        gpspoint = event.getLocation().getPosition();
-        mappoint = mLocDisplay.getMapLocation();
-
-        if (isFirst && mappoint != null) {
-            myLocation();
-            isFirst = false;
-        }
-
-
-        record();
-
-    }*/
-
 
     /*记录轨迹*/
     private void record() {
@@ -554,12 +546,40 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
         lineGraphic = new Graphic(polyline, lineSymbol);
         overlay.getGraphics().add(lineGraphic);
 
+        TrackPoint trackPoint = new TrackPoint();
+
         boolean netState = RetrofitHelper.getInstance(mContext).networkMonitor.isConnected();
         if(netState){
             uPLonLat();
+            trackPoint.setState(1);
         }else{
             ToastUtil.setToast(mContext,"网络未连接");
+            trackPoint.setState(0);
         }
+
+        trackPoint.setLon(gpspoint.getX());
+        trackPoint.setLat(gpspoint.getY());
+        trackPoint.setSbh(macAddress);
+        String time = Constant.dateFormat.format(new Date());
+        trackPoint.setTime(time);
+        trackPoint.setTid(trajectory.getXC_ID());
+
+        localDataSource.saveTrackPoint(trackPoint, new ValueCallback() {
+            @Override
+            public void onSuccess(Object t) {
+
+            }
+
+            @Override
+            public void onFail(String value) {
+
+            }
+
+            @Override
+            public void onGeometry(Geometry geometry) {
+
+            }
+        });
 
     }
 
@@ -596,5 +616,90 @@ public class InspectionFragment extends Fragment implements View.OnClickListener
                         }
                     }
                 });
+    }
+
+
+    /*查询本地轨迹记录*/
+    private void queryPoint(){
+        localDataSource = new LocalDataSourceImpl();
+        localDataSource.queryTrajectory(new ValueCallback() {
+            @Override
+            public void onSuccess(Object t) {
+                List<Trajectory> trajectories = (List<Trajectory>) t;
+
+                if(trajectories.size()>0){
+                    showTrajectorys(trajectories);
+                }
+            }
+
+            @Override
+            public void onFail(String value) {
+
+            }
+
+            @Override
+            public void onGeometry(Geometry geometry) {
+
+            }
+        });
+    }
+
+    /*显示轨迹记录列表*/
+    private void showTrajectorys(final List<Trajectory> trajectories){
+        final String[] items = new String[trajectories.size()];
+        for(int i=0;i<trajectories.size();i++){
+            items[i] = trajectories.get(i).getXC_NAME();
+        }
+        // 创建对话框构建器
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        // 设置参数
+        builder.setTitle("轨迹记录列表")
+                .setItems(items, new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        showLine(trajectories.get(which).getXC_ID());
+                    }
+                });
+        builder.create().show();
+    }
+
+    /*根据轨迹记录id,查询出轨迹点展示路线*/
+    private void showLine(String id){
+        localDataSource = new LocalDataSourceImpl();
+        localDataSource.queryTrackPoint(id, new ValueCallback() {
+            @Override
+            public void onSuccess(Object t) {
+                List<TrackPoint> trackPoints = (List<TrackPoint>) t;
+
+                PointCollection points = new PointCollection(mapview.getSpatialReference());
+                for(TrackPoint trackPoint:trackPoints){
+                    Point point = new Point(trackPoint.getLon(),trackPoint.getLat(),SpatialReference.create(4326));
+                    Point point1 = (Point) GeometryEngine.project(point,mapview.getSpatialReference());
+                    points.add(point1);
+                }
+
+                Polyline polyline = new Polyline(points);
+                SimpleLineSymbol simpleLineSymbol = new SimpleLineSymbol();
+                simpleLineSymbol.setColor(Color.RED);
+                simpleLineSymbol.setWidth(3);
+                simpleLineSymbol.setStyle(SimpleLineSymbol.Style.SOLID);
+
+                Graphic graphic = new Graphic(polyline,simpleLineSymbol);
+                GraphicsOverlay overlay = new GraphicsOverlay();
+                overlay.getGraphics().add(graphic);
+                mapview.getGraphicsOverlays().add(overlay);
+            }
+
+            @Override
+            public void onFail(String value) {
+                ToastUtil.setToast(mContext,value);
+            }
+
+            @Override
+            public void onGeometry(Geometry geometry) {
+
+            }
+        });
     }
 }

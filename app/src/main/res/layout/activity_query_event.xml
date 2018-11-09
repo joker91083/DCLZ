@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/bg_gray"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.Toolbar
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorPrimary">
+
+            <ImageView
+                android:id="@+id/query_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:onClick="onclike"
+                android:background="@drawable/background_view_rounded_image"
+                android:src="@drawable/ic_back"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/event_title"
+                android:textColor="@color/white"
+                android:textSize="18sp" />
+        </android.support.v7.widget.Toolbar>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_monitor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="10dp" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

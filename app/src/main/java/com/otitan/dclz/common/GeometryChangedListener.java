@@ -1,5 +1,6 @@
 package com.otitan.dclz.common;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 
 import com.esri.arcgisruntime.geometry.Geometry;
@@ -27,12 +28,13 @@ public class GeometryChangedListener implements SketchGeometryChangedListener {
         }
         if(b && flag){
             callback.onGeometry(geometry);
-        }else if(b && !flag){
+        }else {
             setOnTouchListener();
         }
     }
 
-    public void setOnTouchListener(){
+    @SuppressLint("ClickableViewAccessibility")
+    private void setOnTouchListener(){
         View.OnTouchListener lo = mapView.getOnTouchListener();
         if (lo instanceof MyMapViewOnTouchListener){
             return;

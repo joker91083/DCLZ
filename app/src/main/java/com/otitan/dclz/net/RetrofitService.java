@@ -6,7 +6,10 @@ import org.greenrobot.greendao.annotation.Generated;
 
 import java.util.List;
 
+import retrofit2.http.Field;
+import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -19,7 +22,7 @@ public interface RetrofitService {
 
     // 登录
     @GET("webservice.asmx/UserLogin")
-    Observable<String> checkLogin(@Query("username") String username, @Query("password") String password);
+    Observable<String> checkLogin(@Query("username") String name, @Query("password") String pasw,@Query("sbh") String sbh,@Query("xlh") String xlh);
 
     // 获取首页图片
     @GET("webservice.asmx/GetPicture")
@@ -46,8 +49,9 @@ public interface RetrofitService {
     Observable<String> getAlgalBloomsOdds(@Query("strArr") String strArr);
 
     /*上传巡护事件*/
-    @GET("webservice.asmx/UPPatrolEvent")
-    Observable<String> upPatrolEvent(@Query("jsonText") String jsonText);
+    @FormUrlEncoded
+    @POST("webservice.asmx/UPPatrolEvent")
+    Observable<String> upPatrolEvent(@Field("jsonText") String jsonText);
 
     // 获取巡护事件
     @GET("webservice.asmx/GetPatrolEvent")
@@ -64,6 +68,10 @@ public interface RetrofitService {
     /*注册设备*/
     @GET("webservice.asmx/addMacAddress")
     Observable<String> addMacAddress(@Query("sbh") String sbh,@Query("xlh") String xlh);
+
+    /*获取周报列表*/
+    @GET("webservice.asmx/GetWeeklyByDate")
+    Observable<String> getWeeklyData(@Query("month") String month);
 
 
 }

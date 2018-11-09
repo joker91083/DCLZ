@@ -2,12 +2,15 @@ package com.otitan.dclz.bean;
 
 import java.io.Serializable;
 
+import io.objectbox.annotation.Entity;
+import io.objectbox.annotation.Id;
+
 /**
  * Created by otitan_li on 2018/7/3.
  * Trajectory
  * 轨迹记录表
  */
-
+@Entity
 public class Trajectory implements Serializable{
     private static final long serialVersionUID = 6117085139564366095L;
 
@@ -94,5 +97,16 @@ public class Trajectory implements Serializable{
     private String XC_XLLC;
     /*备注*/
     private String REMARK;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    @Id
+    private Long id;
 
 }

@@ -28,9 +28,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="18sp"
+                android:text="@string/navigation_title"
                 android:textColor="@color/white"
-                android:text="@string/navigation_title" />
+                android:textSize="18sp" />
         </android.support.v7.widget.Toolbar>
 
         <LinearLayout
@@ -44,13 +44,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="@string/navigation_start"/>
+                android:text="@string/navigation_start" />
 
             <EditText
                 android:id="@+id/et_start"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/navigation_start_hint"/>
+                android:hint="@string/navigation_start_hint" />
         </LinearLayout>
 
         <LinearLayout
@@ -64,40 +64,39 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
-                android:text="@string/navigation_end"/>
+                android:text="@string/navigation_end" />
 
             <EditText
                 android:id="@+id/et_end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/navigation_end_hint"/>
+                android:hint="@string/navigation_end_hint" />
         </LinearLayout>
 
-        <com.baidu.mapapi.map.MapView
-            android:id="@+id/mv_navigation"
+        <com.amap.api.navi.AMapNaviView
+            android:id="@+id/navi_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/ll_end"/>
+            android:layout_height="match_parent" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_navigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="5dp"
+            android:layout_below="@+id/ll_end"
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:background="@drawable/bg_text"
-            android:layout_below="@+id/ll_end"/>
+            android:padding="5dp" />
 
         <ImageView
             android:id="@+id/iv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:padding="10dp"
             android:layout_marginStart="40dp"
             android:layout_marginBottom="10dp"
             android:background="@drawable/bg_button_location_storke"
+            android:padding="10dp"
             android:src="@drawable/ic_location" />
 
         <TextView
@@ -106,13 +105,13 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/bg_button_location_green"
             android:paddingStart="15dp"
             android:paddingTop="10dp"
             android:paddingEnd="15dp"
             android:paddingBottom="10dp"
-            android:layout_marginBottom="10dp"
-            android:background="@drawable/bg_button_location_green"
-            android:textColor="@color/white"
-            android:text="@string/navigation_nav"/>
+            android:text="@string/navigation_nav"
+            android:textColor="@color/white" />
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

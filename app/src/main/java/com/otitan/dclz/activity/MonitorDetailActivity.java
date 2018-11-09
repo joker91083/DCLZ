@@ -76,6 +76,10 @@ public class MonitorDetailActivity extends AppCompatActivity {
     VideoView ivVideo;
     @BindView(R.id.iv_audio)
     TextView ivAudio;
+    @BindView(R.id.view_audio)
+    TextView viewAudio;
+    @BindView(R.id.view_video)
+    TextView viewVideo;
 
     private Context mContext;
     private List<String> picList = new ArrayList<>();
@@ -91,6 +95,8 @@ public class MonitorDetailActivity extends AppCompatActivity {
     private ArrayList<Audio> audios = new ArrayList<>();
 
     private EventReportModel reportModel = null;
+
+    private EventReport eventReport = null;
 
     /**
      * 动态检测权限
@@ -110,6 +116,8 @@ public class MonitorDetailActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.mContext = this;
 
+        eventReport = (EventReport) getIntent().getSerializableExtra("eventReport");
+
         permissionsChecker = new PermissionsChecker(this);
         // 缺少权限时, 进入权限配置页面
         if (permissionsChecker.lacksPermissions(permissions)) {
@@ -128,25 +136,49 @@ public class MonitorDetailActivity extends AppCompatActivity {
                 finish();
             }
         });
-        String x = getIntent().getStringExtra("X");
-        lon = Constant.sixFormat.format(ConverterUtils.toDouble(x));
-        mEt_longitude.setText(lon);
-        String y = getIntent().getStringExtra("Y");
-        lat = Constant.sixFormat.format(ConverterUtils.toDouble(y));
-        mEt_latitude.setText(lat);
-        address = getIntent().getStringExtra("address");
-        mEt_address.setText(address);
 
-        initAdapter();
+        if (eventReport != null) {
+            mEt_name.setText(eventReport.getXJ_SJMC());
+            mEt_description.setText(eventReport.getXJ_MSXX());
+            mEt_longitude.setText(eventReport.getXJ_JD());
+            mEt_latitude.setText(eventReport.getXJ_WD());
+            mEt_address.setText(eventReport.getXJ_XXDZ());
+            mRv_picture.setVisibility(View.GONE);
+            mTv_temporary.setVisibility(View.GONE);
+            mTv_report.setVisibility(View.GONE);
+            mTv_picture.setVisibility(View.GONE);
+            ivVideo.setVisibility(View.GONE);
+            ivAudio.setVisibility(View.GONE);
+            viewAudio.setVisibility(View.GONE);
+            viewVideo.setVisibility(View.GONE);
 
-        int screenWidth = OtherUtils.getWidthInPx(getApplicationContext());
-        int mColumnWidth = (screenWidth - OtherUtils.dip2px(getApplicationContext(), 4)) / 4;
+        } else {
+            String x = getIntent().getStringExtra("X");
+            lon = Constant.sixFormat.format(ConverterUtils.toDouble(x));
+            mEt_longitude.setText(lon);
+            String y = getIntent().getStringExtra("Y");
+            lat = Constant.sixFormat.format(ConverterUtils.toDouble(y));
+            mEt_latitude.setText(lat);
+            address = getIntent().getStringExtra("address");
+            mEt_address.setText(address);
 
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mColumnWidth, mColumnWidth);
-        params.setMargins(15, 10, 10, 10);
-        ivAudio.setLayoutParams(params);
-        ivVideo.setLayoutParams(params);
 
+            mEt_name.setFocusable(true);
+            mEt_name.setFocusableInTouchMode(true);
+            mEt_name.requestFocus();
+            mEt_name.requestFocusFromTouch();
+
+            initAdapter();
+
+            int screenWidth = OtherUtils.getWidthInPx(getApplicationContext());
+            int mColumnWidth = (screenWidth - OtherUtils.dip2px(getApplicationContext(), 4)) / 4;
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(mColumnWidth, mColumnWidth);
+            params.setMargins(15, 10, 10, 10);
+            ivAudio.setLayoutParams(params);
+            ivVideo.setLayoutParams(params);
+
+        }
     }
 
 
@@ -237,7 +269,7 @@ public class MonitorDetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.iv_audio,R.id.iv_video,R.id.tv_report,R.id.tv_temporary})
+    @OnClick({R.id.iv_audio, R.id.iv_video, R.id.tv_report, R.id.tv_temporary})
     public void setonClick(View view) {
         switch (view.getId()) {
             case R.id.iv_audio:
@@ -314,15 +346,15 @@ public class MonitorDetailActivity extends AppCompatActivity {
         }
 
         Gson gson = new Gson();
-        if(images.size()>0){
+        if (images.size() > 0) {
             String jsonimage = gson.toJson(images);
             report.setXJ_ZPDZ(jsonimage);
-        }else{
+        } else {
             report.setXJ_ZPDZ("[]");
         }
 
 
-        if(!audioPath.equals("")){
+        if (!audioPath.equals("")) {
             File audioFile = new File(audioPath);
             if (audioFile.exists()) {
                 Audio audio = new Audio();
@@ -334,11 +366,11 @@ public class MonitorDetailActivity extends AppCompatActivity {
 
             String audiojson = gson.toJson(audios);
             report.setXJ_YPDZ(audiojson);
-        }else{
+        } else {
             report.setXJ_YPDZ("[]");
         }
 
-        if(!videoPath.equals("")){
+        if (!videoPath.equals("")) {
             File videoFile = new File(videoPath);
             if (videoFile.exists()) {
                 Video video = new Video();
@@ -349,21 +381,21 @@ public class MonitorDetailActivity extends AppCompatActivity {
             }
             String videojson = gson.toJson(videos);
             report.setXJ_SPDZ(videojson);
-        }else{
+        } else {
             report.setXJ_SPDZ("[]");
         }
 
         String json = new Gson().toJson(report);
         if (RetrofitHelper.getInstance(mContext).networkMonitor.isConnected()) {
-            ProgressDialogUtil.startProgressDialog(this,"上传中...");
-            reportModel.senInofToServer(json, "",this);
-        }else{
-            ToastUtil.setToast(mContext,"网络未连接");
+            ProgressDialogUtil.startProgressDialog(this, "上传中...");
+            reportModel.senInofToServer(json, "", this);
+        } else {
+            ToastUtil.setToast(mContext, "网络未连接");
         }
     }
 
     /*本地保存数据*/
-    private void addLocalReport(){
+    private void addLocalReport() {
         //网络连接后上报成功
         EventReport report = new EventReport();
         report.setXJ_JD(lon);
@@ -387,11 +419,11 @@ public class MonitorDetailActivity extends AppCompatActivity {
 
         report.setXJ_ZPDZ(pictxt);
 
-        if(!audioPath.equals("")){
+        if (!audioPath.equals("")) {
             report.setXJ_YPDZ(audioPath);
         }
 
-        if(!videoPath.equals("")){
+        if (!videoPath.equals("")) {
             report.setXJ_SPDZ(videoPath);
         }
 

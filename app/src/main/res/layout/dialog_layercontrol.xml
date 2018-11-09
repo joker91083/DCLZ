@@ -12,7 +12,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="10dp"
             android:background="@color/colorPrimary">
 
             <TextView
@@ -20,14 +19,17 @@
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
                 android:textSize="18sp"
+                android:layout_centerInParent="true"
                 android:textColor="@color/white"
-                android:text="@string/satellite_layer" />
+                android:text="@string/layers" />
 
             <ImageView
                 android:id="@+id/iv_close"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
+                android:padding="10dp"
+                android:background="@drawable/background_view_rounded_image"
                 android:src="@drawable/ic_close_white"/>
         </RelativeLayout>
 
@@ -35,32 +37,36 @@
             android:id="@+id/rg_layer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:orientation="horizontal">
 
             <RadioButton
                 android:id="@+id/rb_base"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:checked="true"
-                android:padding="10dp"
-                android:gravity="center"
                 android:button="@null"
-                android:background="@drawable/bg_button_top"
-                android:textColor="@color/balck"
-                android:text="@string/layer_base"/>
+                android:checked="true"
+                android:drawableTop="@drawable/rb_mapbase_selector"
+                android:drawablePadding="5dp"
+                android:gravity="center"
+                android:text="基础图"
+                android:textSize="14sp"
+                android:textColor="@color/black" />
 
             <RadioButton
                 android:id="@+id/rb_image"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
                 android:padding="10dp"
-                android:gravity="center"
+                android:layout_weight="1"
                 android:button="@null"
-                android:background="@drawable/bg_button_top"
-                android:textColor="@color/balck"
-                android:text="@string/layer_image"/>
+                android:drawableTop="@drawable/rb_mapimg_selector"
+                android:gravity="center"
+                android:text="影像图"
+                android:textColor="@color/black" />
         </RadioGroup>
 
         <android.support.v7.widget.RecyclerView
@@ -72,7 +78,7 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="20dp"
-            android:background="@color/colorPrimary"/>
+            android:layout_height="10dp"
+            android:background="@color/colorPrimary" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

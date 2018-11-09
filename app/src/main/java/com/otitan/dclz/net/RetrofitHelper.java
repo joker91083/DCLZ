@@ -25,20 +25,20 @@ import retrofit2.converter.simplexml.SimpleXmlConverterFactory;
 public class RetrofitHelper {
     private Context mContext;
 
-    public static NetworkMonitor networkMonitor;
+    public NetworkMonitor networkMonitor;
     GsonConverterFactory factory = GsonConverterFactory.create(new GsonBuilder().create());
     private static RetrofitHelper instance = null;
     private Retrofit mRetrofit = null;
     public static RetrofitHelper getInstance(Context context) {
         if (instance == null) {
             instance = new RetrofitHelper(context);
-            networkMonitor = new LiveNetworkMonitor(context);
         }
         return instance;
     }
 
     private RetrofitHelper(Context mContext) {
         this.mContext = mContext;
+        networkMonitor = new LiveNetworkMonitor(mContext);
         init();
     }
 

@@ -8,9 +8,7 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/NaviTts" />
             <option value="$PROJECT_DIR$/app" />
-            <option value="$PROJECT_DIR$/onsdk_all" />
             <option value="$PROJECT_DIR$/../LibraryManager" />
             <option value="$PROJECT_DIR$/../LibraryManager/baselibrary" />
             <option value="$PROJECT_DIR$/../LibraryManager/eventlibrary" />

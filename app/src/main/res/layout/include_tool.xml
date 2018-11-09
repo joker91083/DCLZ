@@ -8,18 +8,19 @@
         android:layout_height="wrap_content"
         android:background="@drawable/bg_layout_transparent"
         android:orientation="vertical"
-        android:padding="10dp">
+        android:padding="5dp">
 
         <LinearLayout
-            android:layout_width="210dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:id="@+id/ll_coordinate"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/background_view_rounded_image"
                 android:orientation="vertical">
 
@@ -28,7 +29,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_text"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_coordinate" />
 
                 <TextView
@@ -41,11 +42,9 @@
 
             <LinearLayout
                 android:id="@+id/ll_navigation"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/background_view_rounded_image"
                 android:orientation="vertical">
 
@@ -54,7 +53,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_text"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_navigation" />
 
                 <TextView
@@ -65,68 +64,21 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/ll_attribute"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/background_view_rounded_image"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/bg_text"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_attribute" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/tool_attribute"
-                    android:textSize="12sp" />
-            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
-            android:layout_width="210dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
             android:orientation="horizontal">
 
             <LinearLayout
-                android:id="@+id/ll_distance"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:background="@drawable/background_view_rounded_image"
-                android:orientation="vertical">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:background="@drawable/bg_text"
-                    android:padding="10dp"
-                    android:src="@drawable/ic_distance" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="@string/tool_distance"
-                    android:textSize="12sp" />
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/ll_area"
-                android:layout_width="0dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginEnd="5dp"
-                android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/background_view_rounded_image"
                 android:orientation="vertical">
 
@@ -135,7 +87,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_text"
-                    android:padding="10dp"
+                    android:padding="5dp"
                     android:src="@drawable/ic_area" />
 
                 <TextView
@@ -147,10 +99,10 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_clean"
-                android:layout_width="0dp"
+                android:id="@+id/ll_distance"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_margin="5dp"
                 android:background="@drawable/background_view_rounded_image"
                 android:orientation="vertical">
 
@@ -159,7 +111,38 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:background="@drawable/bg_text"
-                    android:padding="10dp"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_distance" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/tool_distance"
+                    android:textSize="12sp" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="5dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_clean"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_view_rounded_image"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_text"
+                    android:padding="5dp"
                     android:src="@drawable/ic_clean" />
 
                 <TextView
@@ -169,6 +152,33 @@
                     android:text="@string/tool_clean"
                     android:textSize="12sp" />
             </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_attribute"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:background="@drawable/background_view_rounded_image"
+                android:orientation="vertical"
+                android:visibility="gone">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:background="@drawable/bg_text"
+                    android:padding="5dp"
+                    android:src="@drawable/ic_attribute" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/tool_attribute"
+                    android:textSize="12sp" />
+            </LinearLayout>
+
+
         </LinearLayout>
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

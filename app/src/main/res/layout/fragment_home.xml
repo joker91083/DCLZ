@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.DrawerLayout
-    android:id="@+id/dl_home"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/dl_home"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,24 +19,27 @@
 
             <ImageView
                 android:id="@+id/iv_user"
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:src="@drawable/topuser" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/background_view_rounded_image"
+                android:padding="10dp"
+                android:src="@drawable/topuser"
+                tools:ignore="ContentDescription" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="18sp"
+                android:text="@string/app_name"
                 android:textColor="@color/white"
-                android:text="@string/app_name" />
+                android:textSize="18sp" />
         </android.support.v7.widget.Toolbar>
 
         <com.youth.banner.Banner
             android:id="@+id/bn_top"
             android:layout_width="match_parent"
             android:layout_height="130dp"
-            android:background="@drawable/nopicture"/>
+            android:background="@drawable/nopicture" />
 
         <ScrollView
             android:layout_width="match_parent"
@@ -52,140 +54,150 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_remote"
                     android:drawablePadding="10dp"
-                    android:background="@color/white"
-                    android:textSize="16sp"
-                    android:text="@string/home_remote"/>
+                    android:padding="5dp"
+                    android:text="@string/home_remote"
+                    android:textSize="16sp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:layout_marginTop="1dp"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/iv_satellite"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/ic_satellite"/>
+                        android:src="@drawable/ic_satellite"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_alignTop="@+id/iv_satellite"
+                        android:layout_marginLeft="3dp"
                         android:layout_toRightOf="@+id/iv_satellite"
-                        android:layout_marginLeft="5dp"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/home_satellite"/>
+                            android:layout_gravity=""
+                            android:text="@string/home_satellite" />
 
                         <TextView
                             android:id="@+id/tv_satellite_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/text_orange"
-                            android:text=""/>
+                            android:text=""
+                            android:textColor="@color/text_orange" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/iv_satellite_detail"
-                        android:layout_width="20dp"
-                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_check"/>
+                        android:background="@drawable/background_view_rounded_image"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_check"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_satellite_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
-                    android:background="@color/white"
-                    android:text=""/>
+                    android:text="" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:background="@color/bg_gray"
                     android:paddingLeft="5dp"
-                    android:paddingRight="5dp"
-                    android:background="@color/bg_gray"/>
+                    android:paddingRight="5dp" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:padding="10dp">
 
                     <ImageView
                         android:id="@+id/iv_ground"
                         android:layout_width="40dp"
                         android:layout_height="40dp"
-                        android:src="@drawable/ic_ground"/>
+                        android:src="@drawable/ic_ground"
+                        tools:ignore="ContentDescription" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@+id/iv_ground"
                         android:layout_marginLeft="5dp"
+                        android:layout_toRightOf="@+id/iv_ground"
                         android:orientation="vertical">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/home_ground"/>
+                            android:text="@string/home_ground" />
 
                         <TextView
                             android:id="@+id/tv_ground_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/text_orange"
-                            android:text=""/>
+                            android:text=""
+                            android:textColor="@color/text_orange" />
                     </LinearLayout>
 
                     <ImageView
                         android:id="@+id/iv_ground_detail"
-                        android:layout_width="20dp"
-                        android:layout_height="30dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
-                        android:src="@drawable/ic_check"/>
+                        android:background="@drawable/background_view_rounded_image"
+                        android:padding="8dp"
+                        android:src="@drawable/ic_check"
+                        tools:ignore="ContentDescription" />
                 </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_ground_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:background="@color/white"
                     android:paddingLeft="10dp"
                     android:paddingRight="10dp"
                     android:paddingBottom="10dp"
-                    android:background="@color/white"
-                    android:text=""/>
+                    android:text="" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_buoy"
                     android:drawablePadding="10dp"
-                    android:background="@color/white"
-                    android:textSize="16sp"
-                    android:text="@string/home_buoy"/>
+                    android:padding="5dp"
+                    android:text="@string/home_buoy"
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:layout_marginTop="1dp"
                     android:background="@color/white"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="10dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -196,15 +208,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_time"/>
+                            android:src="@drawable/ic_time" />
 
                         <TextView
                             android:id="@+id/tv_buoy_time"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="5dp"
-                            android:textColor="@color/text_orange"
-                            android:text=""/>
+                            android:text=""
+                            android:textColor="@color/text_orange" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -215,129 +227,125 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_chlorophyll"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_chlorophyll"/>
+                                    android:src="@drawable/ic_chlorophyll" />
 
                                 <TextView
                                     android:id="@+id/tv_chlorophyll"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_chlorophyll"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_chlorophyll"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_chlorophyll_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_chlorophyll_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_oxygen"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_oxygen"/>
+                                    android:src="@drawable/ic_oxygen" />
 
                                 <TextView
                                     android:id="@+id/tv_oxygen"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_oxygen"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_oxygen"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_oxygen_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_oxygen_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -350,129 +358,125 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_cyanobacteria"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_cyanobacteria"/>
+                                    android:src="@drawable/ic_cyanobacteria" />
 
                                 <TextView
                                     android:id="@+id/tv_cyanobacteria"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_cyanobacteria"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_cyanobacteria"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_cyanobacteria_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_cyanobacteria_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_temperature"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_temperature"/>
+                                    android:src="@drawable/ic_temperature" />
 
                                 <TextView
                                     android:id="@+id/tv_temperature"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_temperature"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_temperature"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_temperature_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_temperature_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -485,129 +489,125 @@
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginRight="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_turbidity"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_turbidity"/>
+                                    android:src="@drawable/ic_turbidity" />
 
                                 <TextView
                                     android:id="@+id/tv_turbidity"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_turbidity"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_turbidity"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_turbidity_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_turbidity_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:padding="5dp"
                             android:layout_marginTop="10dp"
                             android:layout_marginBottom="10dp"
+                            android:layout_weight="1"
                             android:background="@drawable/bg_humidity"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:padding="5dp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="3"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <ImageView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:src="@drawable/ic_humidity"/>
+                                    android:src="@drawable/ic_humidity" />
 
                                 <TextView
                                     android:id="@+id/tv_humidity"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="18sp"
+                                    android:text=""
                                     android:textColor="@color/white"
-                                    android:text=""/>
+                                    android:textSize="18sp" />
                             </LinearLayout>
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="0dp"
-                                android:layout_weight="1"
+                                android:layout_height="wrap_content"
                                 android:orientation="horizontal">
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="2"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_humidity"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_humidity"/>
+                                    android:textSize="12sp" />
 
                                 <TextView
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_gravity="center_vertical"
                                     android:layout_weight="3"
                                     android:gravity="center"
-                                    android:layout_gravity="center_vertical"
-                                    android:textSize="12sp"
+                                    android:text="@string/home_humidity_unit"
                                     android:textColor="@color/white"
-                                    android:text="@string/home_humidity_unit"/>
+                                    android:textSize="12sp" />
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
@@ -616,13 +616,13 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_odds"
                     android:drawablePadding="10dp"
-                    android:background="@color/white"
-                    android:textSize="16sp"
-                    android:text="@string/home_odds"/>
+                    android:padding="5dp"
+                    android:text="@string/home_odds"
+                    android:textSize="16sp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -634,8 +634,8 @@
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -649,17 +649,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="end"
-                                android:textSize="24sp"
+                                android:text=""
                                 android:textColor="#e74c3c"
-                                android:text=""/>
+                                android:textSize="24sp" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:paddingLeft="5dp"
-                                android:textColor="#e74c3c"
-                                android:text="@string/home_odds_percent"/>
+                                android:text="@string/home_odds_percent"
+                                android:textColor="#e74c3c" />
                         </LinearLayout>
 
                         <TextView
@@ -667,7 +667,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="5dp"
-                            android:text="@string/home_odds_first"/>
+                            android:text="@string/home_odds_first" />
                     </LinearLayout>
 
                     <View
@@ -675,13 +675,13 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@color/bg_gray"/>
+                        android:background="@color/bg_gray" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -695,17 +695,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="end"
-                                android:textSize="24sp"
+                                android:text=""
                                 android:textColor="#ff8400"
-                                android:text=""/>
+                                android:textSize="24sp" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:paddingLeft="5dp"
-                                android:textColor="#ff8400"
-                                android:text="@string/home_odds_percent"/>
+                                android:text="@string/home_odds_percent"
+                                android:textColor="#ff8400" />
                         </LinearLayout>
 
                         <TextView
@@ -713,7 +713,7 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="5dp"
-                            android:text="@string/home_odds_second"/>
+                            android:text="@string/home_odds_second" />
                     </LinearLayout>
 
                     <View
@@ -721,13 +721,13 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="10dp"
                         android:layout_marginBottom="10dp"
-                        android:background="@color/bg_gray"/>
+                        android:background="@color/bg_gray" />
 
                     <LinearLayout
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_weight="1"
                         android:layout_margin="10dp"
+                        android:layout_weight="1"
                         android:orientation="vertical">
 
                         <LinearLayout
@@ -741,17 +741,17 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:gravity="end"
-                                android:textSize="24sp"
+                                android:text=""
                                 android:textColor="#1590ef"
-                                android:text=""/>
+                                android:textSize="24sp" />
 
                             <TextView
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:paddingLeft="5dp"
-                                android:textColor="#1590ef"
-                                android:text="@string/home_odds_percent"/>
+                                android:text="@string/home_odds_percent"
+                                android:textColor="#1590ef" />
                         </LinearLayout>
 
                         <TextView
@@ -759,27 +759,27 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
                             android:layout_marginTop="5dp"
-                            android:text="@string/home_odds_third"/>
+                            android:text="@string/home_odds_third" />
                     </LinearLayout>
                 </LinearLayout>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="5dp"
                     android:layout_marginTop="5dp"
+                    android:background="@color/white"
                     android:drawableLeft="@drawable/ic_patrol"
                     android:drawablePadding="10dp"
-                    android:background="@color/white"
-                    android:textSize="16sp"
-                    android:text="@string/home_patrol"/>
+                    android:padding="5dp"
+                    android:text="@string/home_patrol"
+                    android:textSize="16sp" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_patrol"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1dp"
-                    android:layout_marginBottom="10dp"/>
+                    android:layout_marginBottom="10dp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -789,8 +789,8 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:background="@color/bg_gray"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/user_head"
-        app:menu="@menu/user_menu"/>
+        app:menu="@menu/user_menu" />
 </android.support.v4.widget.DrawerLayout>

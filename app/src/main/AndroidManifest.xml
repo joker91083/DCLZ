@@ -23,8 +23,8 @@
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <!-- 获取运营商信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-
-    <uses-permission android:name="android.permission.READ_LOGS"
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
 
     <application
@@ -36,22 +36,12 @@
         android:theme="@style/AppTheme.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
 
+        <!-- 高德定位 -->
+        <service android:name="com.amap.api.location.APSService" />
+        <!-- //开发者申请的key -->
         <meta-data
-            android:name="com.baidu.speech.APP_ID"
-            android:value="14460066" />
-
-        <meta-data
-            android:name="com.baidu.speech.SECRET_KEY"
-            android:value="gobpHha2qXLCbH1n2KKYssFqxmPc7Wio" />
-
-        <meta-data
-            android:name="com.baidu.lbsapi.API_KEY"
-            android:value="w9LapuDC7lnu25anSTd2q7YrA89obLGh" />
-
-        <service
-            android:name="com.baidu.location.f"
-            android:enabled="true"
-            android:process=":remote" />
+            android:name="com.amap.api.v2.apikey"
+            android:value="ad93ebf944fc64d26c66e0c855731712" />
 
         <activity
             android:name=".activity.LoginActivity"
@@ -62,6 +52,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.otitan.dclz.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
 
         <!-- 主页 -->
         <activity
@@ -79,14 +80,25 @@
         <activity
             android:name=".activity.ChangePassActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-        <!--导航-->
+        <!-- 导航 -->
         <activity
             android:name=".activity.NavigationActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
-        <!--百度导航-->
+        <!-- 百度导航 -->
         <activity
             android:name=".activity.BNaviGuideActivity"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize" />
+        <activity android:name=".activity.QueryEventActivity" />
+        <activity android:name=".activity.WeeklyDetailActivity" />
+        <activity android:name=".activity.PdfActivity" />
+        <activity android:name=".activity.DocActivity" />
+        <activity android:name=".activity.GdnavigationActivity"/>
+
+        <!--高德导航-->
+        <activity
+            android:name="com.amap.api.navi.AmapRouteActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize" />
+
     </application>
 
 </manifest>

@@ -14,25 +14,21 @@ import android.view.ViewGroup;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.otitan.dclz.Myapplication;
 import com.otitan.dclz.R;
 import com.otitan.dclz.activity.MonitorDetailActivity;
+import com.otitan.dclz.activity.WeeklyDetailActivity;
 import com.otitan.dclz.adapter.MonitorAdapter;
-import com.otitan.dclz.bean.EventReport;
-import com.otitan.dclz.bean.Patrol;
+import com.otitan.dclz.adapter.WeeklyAdapter;
+import com.otitan.dclz.bean.Weekly;
 import com.otitan.dclz.net.RetrofitHelper;
-import com.titan.baselibrary.util.MobileInfoUtil;
+import com.otitan.dclz.util.Constant;
 import com.titan.baselibrary.util.ToastUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.objectbox.Box;
-import io.objectbox.query.QueryBuilder;
 import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
@@ -63,27 +59,15 @@ public class MonitorFragment extends Fragment {
     }
 
     private void initView() {
-        // 设备号
-        String mac = MobileInfoUtil.getMAC(mContext);
-
-        // 当前时间
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-        // 一小时前
-        long current = System.currentTimeMillis();
-        current -= 60 * 60 * 1000;
-        String anHourAgo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
-
-        getMonitor(mac, anHourAgo, now);
+        String month = Constant.monthFormat.format(new Date());
+        getWeeklyByMonth(month);
     }
 
     /**
      * 获取事件列表
      */
-    private void getMonitor(String mac, String anHourAgo, String now) {
-        // TODO: 2018/9/28
-        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer()
-                .getPatrolInfo("C0:11:73:99:B1:65", "2018-9-27 8:12:22", "2018-9-27 10:12:22");
-//        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getPatrolInfo(mac, anHourAgo, now);
+    private void getWeeklyByMonth(String month) {
+        Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getWeeklyData(month);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
             public void onCompleted() {
@@ -92,42 +76,42 @@ public class MonitorFragment extends Fragment {
 
             @Override
             public void onError(Throwable e) {
-
+                ToastUtil.setToast(mContext,"获取周报"+e.getMessage());
             }
 
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    ArrayList<EventReport> list = new Gson().fromJson(s, new TypeToken<ArrayList<EventReport>>() {}.getType());
+                    ArrayList<Weekly> list = new Gson().fromJson(s, new TypeToken<ArrayList<Weekly>>() {}.getType());
 
                     initReportAdapter(list);
 
                 } else {
-                    ToastUtil.setToast(mContext,"数据解析错误");
+                    ToastUtil.setToast(mContext,"没有周报数据");
                 }
             }
         });
     }
 
-    private void initReportAdapter(ArrayList<EventReport> list){
-        ArrayList<EventReport> arrayList = new ArrayList<>();
-        arrayList.addAll(list);
+    private void initReportAdapter(final ArrayList<Weekly> list){
 
-        Box<EventReport> reportBox = Myapplication.getBoxstore().boxFor(EventReport.class);
-        QueryBuilder<EventReport> query = reportBox.query();
-        List<EventReport> local = query.build().find();
-
-        arrayList.addAll(local);
 
         mRv_monitor.setLayoutManager(new LinearLayoutManager(mContext));
-        MonitorAdapter adapter = new MonitorAdapter(mContext, arrayList);
+        WeeklyAdapter adapter = new WeeklyAdapter(mContext,list);
+
+
         mRv_monitor.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
         mRv_monitor.setAdapter(adapter);
 
-        adapter.setItemClickListener(new MonitorAdapter.MyItemClickListener() {
+        adapter.setItemClickListener(new WeeklyAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                startActivity(new Intent(mContext, MonitorDetailActivity.class));
+                Weekly weekly = list.get(position);
+                Intent intent = new Intent(mContext,WeeklyDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("weekly",weekly);
+                intent.putExtras(bundle);
+                startActivity(intent);
             }
         });
     }

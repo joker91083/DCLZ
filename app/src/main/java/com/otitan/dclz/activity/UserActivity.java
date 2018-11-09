@@ -60,8 +60,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
     private void initView() {
         getUser();
-
-        mTv_version.setText("V" + getPackageInfo(this).versionName);
+        String value = "V" + getPackageInfo(this).versionName;
+        mTv_version.setText(value);
 
         mIv_back.setOnClickListener(this);
         mTv_change.setOnClickListener(this);

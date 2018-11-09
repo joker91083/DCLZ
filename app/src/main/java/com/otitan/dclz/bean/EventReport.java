@@ -1,11 +1,14 @@
 package com.otitan.dclz.bean;
 
+import java.io.Serializable;
+
 import io.objectbox.annotation.Entity;
 import io.objectbox.annotation.Id;
 
 @Entity
-public class EventReport {
+public class EventReport implements Serializable {
 
+    private static final long serialVersionUID = 7963626502281085646L;
     @Id(assignable = true)
     private Long LID;//本地保存id
 

@@ -55,7 +55,7 @@ public class ResourcesManager implements Serializable {
 
 	/** 获取影像文件列表  */
 	public List<File> getImgTitlePath() {
-		List<String> fileter = new ArrayList<String>();
+		List<String> fileter = new ArrayList<>();
 		fileter.add("image");
 		return getPahts(otitan_map, fileter);
 	}

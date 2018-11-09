@@ -1,5 +1,6 @@
 package com.otitan.dclz.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -39,12 +40,16 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public static final String PREFS_NAME = "MYSP";
     public static SharedPreferences MSP;
 
+    private Context mContext;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
         ButterKnife.bind(this);
+
+        mContext = LoginActivity.this;
 
         MSP = this.getSharedPreferences(PREFS_NAME, 0);
 
@@ -84,7 +89,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * 登录
      */
     private void login(final String user, final String pass) {
-        Observable<String> observable = RetrofitHelper.getInstance(this).getServer().checkLogin(user, pass);
+        String sbh = MobileUtil.getInstance().getMacAdress(mContext);
+        String xlh = MobileUtil.getInstance().getMobileXlh(mContext);
+        Observable<String> observable = RetrofitHelper.getInstance(this).getServer().checkLogin(user, pass,sbh,xlh);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
             public void onCompleted() { // 完成请求后
@@ -93,7 +100,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             @Override
             public void onError(Throwable e) { // 异常处理
-
+                ToastUtil.setToast(mContext,"登录"+e.getMessage());
             }
 
             @Override
@@ -143,7 +150,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
 
         if(RetrofitHelper.getInstance(this).networkMonitor.isConnected()){
-            addMacAddress();
+
         }
     }
 }

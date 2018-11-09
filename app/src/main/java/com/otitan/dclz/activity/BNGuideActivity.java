@@ -1,20 +1,6 @@
 package com.otitan.dclz.activity;
 
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.Toast;
-import com.baidu.navisdk.adapter.BNRouteGuideManager;
-import com.baidu.navisdk.adapter.BNRoutePlanNode;
-/*import com.baidu.navisdk.adapter.BNaviBaseCallbackModel;
-import com.baidu.navisdk.adapter.BaiduNaviCommonModule;
-import com.baidu.navisdk.adapter.NaviModuleFactory;
-import com.baidu.navisdk.adapter.NaviModuleImpl;*/
 
 /**
  * Created by sp on 2018/10/17.

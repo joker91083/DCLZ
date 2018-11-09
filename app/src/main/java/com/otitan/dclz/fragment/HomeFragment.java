@@ -1,5 +1,6 @@
 package com.otitan.dclz.fragment;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -34,6 +35,8 @@ import com.otitan.dclz.bean.Buoy;
 import com.otitan.dclz.bean.Monitor;
 import com.otitan.dclz.bean.Patrol;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.otitan.dclz.util.Constant;
+import com.otitan.dclz.util.MobileUtil;
 import com.squareup.picasso.Picasso;
 import com.titan.baselibrary.util.MobileInfoUtil;
 import com.titan.baselibrary.util.ToastUtil;
@@ -43,6 +46,7 @@ import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
+import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -138,7 +142,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
 
     private void initView() {
         // 设备号
-        mac = MobileInfoUtil.getMAC(mContext);
+        mac = MobileUtil.getInstance().getMacAdress(mContext);
 
         getData();
         getBanner();
@@ -176,11 +180,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
         getRemoteData(1); // 1 地基遥感
 
         // 当前时间
-        String now = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+        String now = Constant.dateFormat.format(new Date(System.currentTimeMillis()));
         // 一小时前
         long current = System.currentTimeMillis();
         current -= 60 * 60 * 1000;
-        String anHourAgo = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(current));
+        String anHourAgo = Constant.dateFormat.format(new Date(current));
 
         mTv_buoy_time.setText(now);
 
@@ -243,7 +247,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    ArrayList<Monitor> list = new Gson().fromJson(s, new TypeToken<ArrayList<Monitor>>() {}.getType());
+                    ArrayList<Monitor> list = new Gson().fromJson(s, new TypeToken<ArrayList<Monitor>>() {
+                    }.getType());
                     switch (i) {
                         case 0: // 卫星遥感
                             mTv_satellite_time.setText(list.get(0).getJC_DATE());
@@ -276,9 +281,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
      * 获取浮标站数据
      */
     private void getBuoy(String anHourAgo, String now) {
-        // TODO: 2018/9/28
-        /*Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer()
-                .getBuoyData("2018-6-9 7:40:00", "2018-6-9 8:40:00");*/
         Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getBuoyData(anHourAgo, now);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
@@ -288,22 +290,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
 
             @Override
             public void onError(Throwable e) {
-
+                ToastUtil.setToast(mContext,e.getMessage());
             }
 
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    ArrayList<Buoy> list = new Gson().fromJson(s, new TypeToken<ArrayList<Buoy>>() {}.getType());
+                    ArrayList<Buoy> list = new Gson().fromJson(s, new TypeToken<ArrayList<Buoy>>() {
+                    }.getType());
                     Buoy buoy = list.get(0);
-                    mTv_chlorophyll.setText(buoy.getYE_LV_SU());
-                    mTv_oxygen.setText(buoy.getRJ_YANG());
-                    mTv_cyanobacteria.setText(buoy.getLAN_ZAO());
-                    mTv_temperature.setText(buoy.getSHUI_WEN());
-                    mTv_turbidity.setText(buoy.getZHU_DU());
-                    mTv_humidity.setText(buoy.getSHI_DU());
+                    mTv_chlorophyll.setText(Constant.strFormat(buoy.getYE_LV_SU()));
+                    mTv_oxygen.setText(Constant.strFormat(buoy.getRJ_YANG()));
+                    mTv_cyanobacteria.setText(Constant.strFormat(buoy.getLAN_ZAO()));
+                    mTv_temperature.setText(Constant.strFormat(buoy.getSHUI_WEN()));
+                    mTv_turbidity.setText(Constant.strFormat(buoy.getZHU_DU()));
+                    mTv_humidity.setText(Constant.strFormat(buoy.getSHI_DU()));
                 } else {
-
+                    //么有数据
                 }
             }
         });
@@ -322,13 +325,31 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
 
             @Override
             public void onError(Throwable e) {
-
+                ToastUtil.setToast(mContext,""+e.getMessage());
             }
 
             @Override
             public void onNext(String s) {
+                if(s.equals("0")){
+                    switch (i) {
+                        case "1":
+                            mTv_odds_first.setText("");
+                            break;
+
+                        case "2":
+                            mTv_odds_second.setText("");
+                            break;
+
+                        case "3":
+                            mTv_odds_third.setText("");
+                            break;
+                    }
+                    //没有数据
+                    return;
+                }
                 if (!TextUtils.isEmpty(s)) {
-                    ArrayList<AlgalBlooms> list = new Gson().fromJson(s, new TypeToken<ArrayList<AlgalBlooms>>() {}.getType());
+                    ArrayList<AlgalBlooms> list = new Gson().fromJson(s, new TypeToken<ArrayList<AlgalBlooms>>() {
+                    }.getType());
                     switch (i) {
                         case "1":
                             mTv_odds_first.setText(list.get(0).getGL());
@@ -365,9 +386,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
      * 获取巡护事件
      */
     private void getPatrol(String mac, String anHourAgo, String now) {
-        // TODO: 2018/9/28
-        /*Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer()
-                .getPatrolInfo("C0:11:73:99:B1:65", "2018-9-27 8:12:22", "2018-9-27 10:12:22");*/
         Observable<String> observable = RetrofitHelper.getInstance(mContext).getServer().getPatrolInfo(mac, anHourAgo, now);
         observable.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(new Observer<String>() {
             @Override
@@ -383,7 +401,8 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
             @Override
             public void onNext(String s) {
                 if (!s.equals("0")) {
-                    ArrayList<Patrol> list = new Gson().fromJson(s, new TypeToken<ArrayList<Patrol>>() {}.getType());
+                    ArrayList<Patrol> list = new Gson().fromJson(s, new TypeToken<ArrayList<Patrol>>() {
+                    }.getType());
                     mRv_patrol.setLayoutManager(new LinearLayoutManager(mContext));
                     PatrolAdapter adapter = new PatrolAdapter(mContext, list);
                     mRv_patrol.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
@@ -399,14 +418,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
      * 顶部轮播图
      */
     private void initBanner() {
-        /*pathList.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic21363tj30ci08ct96.jpg");
-        pathList.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic259ohaj30ci08c74r.jpg");
-        pathList.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2b16zuj30ci08cwf4.jpg");
-        pathList.add("http://ww4.sinaimg.cn/large/006uZZy8jw1faic2e7vsaj30ci08cglz.jpg");
-        titleList.add("好好学习");
-        titleList.add("天天向上");
-        titleList.add("热爱劳动");
-        titleList.add("不搞对象");*/
 
         //设置内置样式，共有六种可以点入方法内逐一体验使用。
 //        mBn_top.setBannerStyle(BannerConfig.CIRCLE_INDICATOR_TITLE_INSIDE);
@@ -436,6 +447,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
     public void OnBannerClick(int position) {
 
     }
+
     // 自定义的图片加载器
     private class MyLoader extends ImageLoader {
         @Override
@@ -447,24 +459,23 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.iv_user: // 点击显示侧滑菜单
-                //mDl_home.openDrawer(mNv_home);
+            case R.id.iv_user:
                 startActivity(new Intent(mContext, UserActivity.class));
                 break;
 
             case R.id.iv_satellite_detail:
-                mCallback.onArticleSelected("1");
+                mCallback.onArticleSelected("1",mTv_satellite_time.getText().toString());
                 break;
 
             case R.id.iv_ground_detail:
-                mCallback.onArticleSelected("2");
+                mCallback.onArticleSelected("2",mTv_ground_time.getText().toString());
                 break;
         }
     }
 
     // fragment 的上一级 activtiy 实现这个接口
     public interface OnHeadlineSelectedListener {
-        void onArticleSelected(String s);
+        void onArticleSelected(String type,String time);
     }
 
     @Override

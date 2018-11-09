@@ -34,6 +34,7 @@ import com.otitan.dclz.common.MyMapViewOnTouchListener;
 import com.otitan.dclz.common.ToolViewModel;
 import com.otitan.dclz.common.ValueCallback;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.otitan.dclz.util.Constant;
 import com.otitan.dclz.util.TimeUtil;
 import com.titan.baselibrary.timepaker.TimePopupWindow;
 import com.titan.baselibrary.util.ToastUtil;
@@ -53,7 +54,7 @@ import rx.schedulers.Schedulers;
  * Created by sp on 2018/9/25.
  * 地基遥感
  */
-public class GroundFragment extends Fragment implements View.OnClickListener,ValueCallback {
+public class GroundFragment extends BaseFragment implements View.OnClickListener,ValueCallback{
 
     @BindView(R.id.mv_ground)
     MapView mapView;
@@ -115,9 +116,9 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
 
         mContext = GroundFragment.this.getContext();
 
-        initView();
-
         initViewModel();
+
+        initView();
 
         return inflate;
     }
@@ -171,11 +172,13 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
      * 初始化地图
      */
     private void initMap() {
-        ArcGISMap arcGISMap = new ArcGISMap(Basemap.createImagery());
-        TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
-        ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
-        arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
-        mapView.setMap(arcGISMap);
+        //ArcGISMap arcGISMap = new ArcGISMap(Basemap.createOpenStreetMap());
+        //TileCache tileCache = new TileCache(getResources().getString(R.string.World_Imagery));
+        //ArcGISTiledLayer arcGISTiledLayer = new ArcGISTiledLayer(tileCache);
+        //arcGISMap.getBasemap().getBaseLayers().add(arcGISTiledLayer);
+        //mapView.setMap(arcGISMap);
+
+        toolViewModel.addStreetLayer(mapView);
 
         // 去除下方 powered by esri 按钮
         mapView.setAttributionTextVisible(false);
@@ -184,11 +187,6 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
         sketchEditor.addGeometryChangedListener(new GeometryChangedListener(this,mapView));
         mapView.setSketchEditor(sketchEditor);
 
-        View.OnTouchListener lo = mapView.getOnTouchListener();
-        if(null != lo){
-            touchListener = new MyMapViewOnTouchListener(mapView.getContext(),mapView,lo,this);
-            mapView.setOnTouchListener(touchListener);
-        }
     }
 
 
@@ -215,7 +213,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 // 当前坐标点
                 currentPoint = locationChangedEvent.getLocation().getPosition();
                 if (isFirst && currentPoint != null) {
-                    myLocation();
+                    toolViewModel.zoomToMylocation(mContext,mapView,currentPoint);
                     isFirst = false;
                 }
             }
@@ -223,37 +221,33 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
     }
 
     /**
-     * 当前位置
-     */
-    private void myLocation() {
-        if (currentPoint != null) {
-            mapView.setViewpointCenterAsync(currentPoint, 5000);
-        } else {
-            ToastUtil.setToast(mContext, "未获取到当前位置");
-        }
-    }
-
-    /**
      * 监测记录
      */
     private void showEdit(int i) {
+        String value = "";
         switch (i) {
             case 1:
                 index = 1;
-                mTv_title.setText(mRb_first.getText().toString().trim() + " 监测记录");
+                value = mRb_first.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(0).getJC_JGFX());
+
                 break;
 
             case 2:
                 index = 2;
-                mTv_title.setText(mRb_second.getText().toString().trim() + " 监测记录");
+                value = mRb_second.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(1).getJC_JGFX());
+
                 break;
 
             case 3:
                 index = 3;
-                mTv_title.setText(mRb_third.getText().toString().trim() + " 监测记录");
+                value = mRb_third.getText().toString().trim() + " 监测记录";
+                mTv_title.setText(value);
                 mTv_edit.setText(monitorList.get(2).getJC_JGFX());
+
                 break;
         }
     }
@@ -266,6 +260,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
+                toolViewModel.addShuiImageLayer(mapView,mRb_first.getText().toString());
                 showEdit(1);
                 break;
 
@@ -274,6 +269,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 mRb_second.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
+                toolViewModel.addShuiImageLayer(mapView,mRb_second.getText().toString());
                 showEdit(2);
                 break;
 
@@ -282,6 +278,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mIc_edit.setVisibility(View.VISIBLE);
+                toolViewModel.addShuiImageLayer(mapView,mRb_third.getText().toString());
                 showEdit(3);
                 break;
 
@@ -293,14 +290,15 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
 
                     @Override
                     public void onTimeSelect(Date date) {
-                        String choose = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                        String today = new SimpleDateFormat("yyyy-MM-dd").format(new Date(System.currentTimeMillis()));
+                        String choose = Constant.yearFormat.format(date);
+                        String today = Constant.yearFormat.format(new Date(System.currentTimeMillis()));
                         long lChoose = TimeUtil.getLonfromYyr(choose);
                         long lToday = TimeUtil.getLonfromYyr(today);
                         if (lChoose <= lToday) {
                             mTv_title.setText(choose + " 监测记录");
                             // 根据选择的时间，查询监测信息
                             getRemoteData(choose, 1);
+                            toolViewModel.addShuiImageLayer(mapView,choose);
                         } else {
                             ToastUtil.setToast(mContext, "选择日期错误，无法查询！");
                         }
@@ -310,7 +308,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 break;
 
             case R.id.iv_location:
-                myLocation();
+                toolViewModel.zoomToMylocation(mContext,mapView,currentPoint);
                 break;
 
             case R.id.iv_close:
@@ -346,6 +344,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
 
             case R.id.ll_navigation: // 导航
                 ToastUtil.setToast(mContext, "导航");
+                toolViewModel.navigation(mContext,this);
                 break;
 
             case R.id.ll_attribute: // 属性查询
@@ -372,7 +371,7 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
                 break;
 
             case R.id.ll_layer:
-                ToastUtil.setToast(mContext, "图层");
+                toolViewModel.showLayer(mContext,mapView,currentPoint);
                 break;
         }
     }
@@ -452,4 +451,10 @@ public class GroundFragment extends Fragment implements View.OnClickListener,Val
             toolViewModel.iquery(mapView,geometry,calloutViewModel);
         }
     }
+
+
+    public void getHomeTime(String type,String time){
+        toolViewModel.addShuiImageLayer(mapView,time);
+    }
+
 }
