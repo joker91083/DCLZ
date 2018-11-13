@@ -197,11 +197,12 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/up_version"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:padding="15dp"
                     android:layout_marginTop="5dp"
-                    android:background="@color/white"
+                    android:background="@drawable/background_view_rounded_white"
                     android:orientation="horizontal">
 
                     <TextView

@@ -8,12 +8,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.amap.api.maps.model.TextOptions;
 import com.google.gson.Gson;
 import com.otitan.dclz.R;
 import com.otitan.dclz.bean.User;
 import com.otitan.dclz.net.RetrofitHelper;
+import com.titan.baselibrary.util.ToastUtil;
+import com.titan.versionupdata.VersionUpdata;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,6 +51,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     TextView mTv_change;
     @BindView(R.id.tv_check)
     TextView mTv_check;
+    @BindView(R.id.up_version)
+    LinearLayout upVersion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +72,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         mIv_back.setOnClickListener(this);
         mTv_change.setOnClickListener(this);
         mTv_check.setOnClickListener(this);
+
+        upVersion.setOnClickListener(this);
     }
 
     /**
@@ -130,6 +138,14 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
 
             case R.id.tv_check:
                 startActivity(new Intent(this, LoginActivity.class));
+                break;
+            case R.id.up_version:
+                String url = this.getResources().getString(R.string.updataurl);
+                boolean flag = new VersionUpdata(this).checkVersion(url);
+                if(!flag){
+                    ToastUtil.setToast(this,"已经是最新版本");
+                }
+
                 break;
         }
     }

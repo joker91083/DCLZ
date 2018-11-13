@@ -134,4 +134,11 @@
     <string name="serverhost">http://101.201.54.143:5830/</string>
     <!--客户内网-->
     <!--<string name="serverhost">http://192.168.168.62:8010/</string>-->
+
+    <!--版本更新云服务地址-->
+    <string name="updataurl">http://101.201.54.143:8031/apk/dclz/dclzversion.xml</string>
+    <!--内网更新地址-->
+    <!--<string name="updataurl"></string>-->
+
+
 </resources>

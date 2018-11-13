@@ -15,6 +15,7 @@ import com.otitan.dclz.net.RetrofitHelper;
 import com.otitan.dclz.util.MobileUtil;
 import com.otitan.dclz.util.ResourceHelper;
 import com.titan.baselibrary.util.ToastUtil;
+import com.titan.versionupdata.VersionUpdata;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -150,7 +151,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         super.onStart();
 
         if(RetrofitHelper.getInstance(this).networkMonitor.isConnected()){
-
+            String url = this.getResources().getString(R.string.updataurl);
+            boolean flag = new VersionUpdata(this).checkVersion(url);
+            if(!flag){
+                //最新版本
+            }else{
+                //更新版本
+            }
         }
     }
 }

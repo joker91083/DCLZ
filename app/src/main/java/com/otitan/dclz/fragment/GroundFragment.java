@@ -399,9 +399,9 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
                         case 0:
                             monitorList = new Gson().fromJson(s, new TypeToken<ArrayList<Monitor>>() {}.getType());
 
-                            mRb_first.setText(monitorList.get(0).getJC_DATE());
-                            mRb_second.setText(monitorList.get(1).getJC_DATE());
-                            mRb_third.setText(monitorList.get(2).getJC_DATE());
+                            mRb_first.setText(monitorList.get(0).getJC_TIME());
+                            mRb_second.setText(monitorList.get(1).getJC_TIME());
+                            mRb_third.setText(monitorList.get(2).getJC_TIME());
                             break;
                         case 1:
                             Monitor monitor = new Gson().fromJson(s.substring(1, s.length() - 1), Monitor.class);

@@ -71,7 +71,7 @@ public interface RetrofitService {
 
     /*获取周报列表*/
     @GET("webservice.asmx/GetWeeklyByDate")
-    Observable<String> getWeeklyData(@Query("month") String month);
+    Observable<String> getWeeklyBytime(@Query("startDate") String starttime,@Query("endDate") String endtime);
 
 
 }

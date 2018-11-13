@@ -21,31 +21,37 @@
                 android:layout_height="30dp"
                 android:background="@color/white">
 
-                <RadioGroup
-                    android:id="@+id/rg_ground"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_toStartOf="@+id/iv_more"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
 
-                    <RadioButton
-                        android:id="@+id/rb_first"
-                        style="@style/style_RadioButton"
-                        android:text="2018-10-10"
-                        android:textSize="14sp" />
+                    <RadioGroup
+                        android:id="@+id/rg_ground"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_toStartOf="@+id/iv_more"
+                        android:orientation="horizontal">
 
-                    <RadioButton
-                        android:id="@+id/rb_second"
-                        style="@style/style_RadioButton"
-                        android:text="2018-10-10"
-                        android:textSize="14sp" />
+                        <RadioButton
+                            android:id="@+id/rb_first"
+                            style="@style/style_RadioButton"
+                            android:text="2018-10-10"
+                            android:textSize="14sp" />
 
-                    <RadioButton
-                        android:id="@+id/rb_third"
-                        style="@style/style_RadioButton"
-                        android:text="2018-10-10"
-                        android:textSize="14sp" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/rb_second"
+                            style="@style/style_RadioButton"
+                            android:text="2018-10-10"
+                            android:textSize="14sp" />
+
+                        <RadioButton
+                            android:id="@+id/rb_third"
+                            style="@style/style_RadioButton"
+                            android:text="2018-10-10"
+                            android:textSize="14sp" />
+                    </RadioGroup>
+                </HorizontalScrollView>
 
                 <ImageView
                     android:id="@+id/iv_more"

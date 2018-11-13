@@ -23,6 +23,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -39,6 +40,7 @@ import com.otitan.dclz.util.Constant;
 import com.otitan.dclz.util.MobileUtil;
 import com.squareup.picasso.Picasso;
 import com.titan.baselibrary.util.MobileInfoUtil;
+import com.titan.baselibrary.util.ScreenTool;
 import com.titan.baselibrary.util.ToastUtil;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -440,6 +442,13 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
         mBn_top.setOnBannerListener(this);
         //必须最后调用的方法，启动轮播图。
         mBn_top.start();
+
+        ScreenTool.Screen screen = ScreenTool.getScreenPix(this.getActivity());
+        int width = screen.getWidthPixels();
+        int hegiht = screen.getHeightPixels()/4;
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(width,hegiht);
+        mBn_top.setLayoutParams(params);
+
     }
 
     // 轮播图的监听方法

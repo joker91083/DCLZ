@@ -16,6 +16,16 @@ public class Monitor {
 
     private String JC_JGFX; // 监测结果
 
+    private String JC_TIME;
+
+    public String getJC_TIME() {
+        return JC_TIME;
+    }
+
+    public void setJC_TIME(String JC_TIME) {
+        this.JC_TIME = JC_TIME;
+    }
+
     public String getJC_DATE() {
         return JC_DATE;
     }
