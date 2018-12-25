@@ -77,11 +77,12 @@ public class MonitorFragment extends Fragment {
         timeStart.setText(Constant.yearFormat.format(date));
         timeEnd.setText(Constant.yearFormat.format(new Date()));
 
-        String month = Constant.monthFormat.format(new Date());
+        String month = Constant.yearFormat.format(new Date());
         int mon = calendar.get(Calendar.MONTH);
         calendar.set(Calendar.MONTH,mon-1);
         Date mont = calendar.getTime();
-        String cur = Constant.monthFormat.format(mont);
+        String cur = Constant.yearFormat.format(mont);
+
         getWeeklyByMonth(cur,month);
     }
 

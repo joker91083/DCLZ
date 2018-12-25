@@ -1,0 +1,162 @@
+{
+  "_note1": "KEEP THIS FILE! Check it into a version control system (VCS) like git.",
+  "_note2": "ObjectBox manages crucial IDs for your object model. See docs for details.",
+  "_note3": "If you have VCS merge conflicts, you must resolve them according to ObjectBox docs.",
+  "entities": [
+    {
+      "id": "1:2367656294376474994",
+      "lastPropertyId": "14:969277619293408859",
+      "name": "EventReport",
+      "properties": [
+        {
+          "id": "1:6439535730450284201",
+          "name": "LID"
+        },
+        {
+          "id": "2:5592290410923989368",
+          "name": "XJ_ID"
+        },
+        {
+          "id": "3:3669235701035272744",
+          "name": "XJ_SJMC"
+        },
+        {
+          "id": "4:921907785389788022",
+          "name": "XJ_SBBH"
+        },
+        {
+          "id": "5:191927897598072781",
+          "name": "XJ_MSXX"
+        },
+        {
+          "id": "6:581923552212179228",
+          "name": "XJ_SCRQ"
+        },
+        {
+          "id": "7:3572545572884181388",
+          "name": "XJ_JD"
+        },
+        {
+          "id": "8:727221231242397642",
+          "name": "XJ_WD"
+        },
+        {
+          "id": "9:1304909195091455347",
+          "name": "XJ_XXDZ"
+        },
+        {
+          "id": "10:555204704910758376",
+          "name": "REMARK"
+        },
+        {
+          "id": "11:2015111873414809423",
+          "name": "XJ_ZPDZ"
+        },
+        {
+          "id": "12:3127145147396772606",
+          "name": "XJ_YPDZ"
+        },
+        {
+          "id": "13:7799110689850943654",
+          "name": "XJ_SPDZ"
+        },
+        {
+          "id": "14:969277619293408859",
+          "name": "XC_ID"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "2:8070360962827500707",
+      "lastPropertyId": "7:3078304779005449799",
+      "name": "TrackPoint",
+      "properties": [
+        {
+          "id": "1:3416569607363544465",
+          "name": "id"
+        },
+        {
+          "id": "2:9008285615448012901",
+          "name": "lon"
+        },
+        {
+          "id": "3:8429504408566408301",
+          "name": "lat"
+        },
+        {
+          "id": "4:6350663936788286423",
+          "name": "state"
+        },
+        {
+          "id": "5:2376547059915417107",
+          "name": "time"
+        },
+        {
+          "id": "6:3801193239597674857",
+          "name": "sbh"
+        },
+        {
+          "id": "7:3078304779005449799",
+          "name": "tid"
+        }
+      ],
+      "relations": []
+    },
+    {
+      "id": "3:7395760597124769842",
+      "lastPropertyId": "9:3841185806545248524",
+      "name": "Trajectory",
+      "properties": [
+        {
+          "id": "1:2357696757295272828",
+          "name": "XC_ID"
+        },
+        {
+          "id": "2:1466018760763141313",
+          "name": "XC_NAME"
+        },
+        {
+          "id": "3:6839303467615665224",
+          "name": "XC_STARTTIME"
+        },
+        {
+          "id": "4:4265160454756204074",
+          "name": "XC_ENDTIME"
+        },
+        {
+          "id": "5:8906402694453544594",
+          "name": "XC_METHOD"
+        },
+        {
+          "id": "6:1574044965084931960",
+          "name": "XC_SBH"
+        },
+        {
+          "id": "7:8095257674116711269",
+          "name": "XC_XLLC"
+        },
+        {
+          "id": "8:7203790749179518704",
+          "name": "REMARK"
+        },
+        {
+          "id": "9:3841185806545248524",
+          "name": "id"
+        }
+      ],
+      "relations": []
+    }
+  ],
+  "lastEntityId": "3:7395760597124769842",
+  "lastIndexId": "0:0",
+  "lastRelationId": "0:0",
+  "lastSequenceId": "0:0",
+  "modelVersion": 4,
+  "modelVersionParserMinimum": 4,
+  "retiredEntityUids": [],
+  "retiredIndexUids": [],
+  "retiredPropertyUids": [],
+  "retiredRelationUids": [],
+  "version": 1
+}

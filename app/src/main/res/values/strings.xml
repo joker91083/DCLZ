@@ -127,9 +127,12 @@
     <string name="World_Street_Map">http://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer</string>
 
     <!--水花影像-->
-    <string name="shui_imager">http://106.74.18.36:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>
-    <!--内网影像-->
-    <!--<string name="shui_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>-->
+    <!--<string name="shui_imager">http://106.74.18.36:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>-->
+    <!--内网卫星水华影像-->
+    <string name="shui_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/WXJC_SH/MapServer</string>
+
+    <!--内网地基影像-->
+    <string name="diji_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/DJJC_SH/MapServer</string>
     <!--云服务-->
     <string name="serverhost">http://101.201.54.143:5830/</string>
     <!--客户内网-->

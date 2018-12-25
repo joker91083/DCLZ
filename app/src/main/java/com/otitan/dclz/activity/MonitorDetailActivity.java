@@ -1,6 +1,7 @@
 package com.otitan.dclz.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -129,6 +131,7 @@ public class MonitorDetailActivity extends AppCompatActivity {
         reportModel = new EventReportModel();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private void initView() {
         mIv_back.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -145,7 +148,6 @@ public class MonitorDetailActivity extends AppCompatActivity {
             mEt_address.setText(eventReport.getXJ_XXDZ());
             mRv_picture.setVisibility(View.GONE);
             mTv_temporary.setVisibility(View.GONE);
-            mTv_report.setVisibility(View.GONE);
             mTv_picture.setVisibility(View.GONE);
             ivVideo.setVisibility(View.GONE);
             ivAudio.setVisibility(View.GONE);
@@ -178,6 +180,13 @@ public class MonitorDetailActivity extends AppCompatActivity {
             ivAudio.setLayoutParams(params);
             ivVideo.setLayoutParams(params);
 
+            ivVideo.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View v, MotionEvent event) {
+                    startVideo();
+                    return false;
+                }
+            });
         }
     }
 
@@ -269,14 +278,11 @@ public class MonitorDetailActivity extends AppCompatActivity {
         });
     }
 
-    @OnClick({R.id.iv_audio, R.id.iv_video, R.id.tv_report, R.id.tv_temporary})
+    @OnClick({R.id.iv_audio, R.id.tv_report, R.id.tv_temporary})
     public void setonClick(View view) {
         switch (view.getId()) {
             case R.id.iv_audio:
                 startAudio();
-                break;
-            case R.id.iv_video:
-                startVideo();
                 break;
             case R.id.tv_report:
                 addOnline();
@@ -301,6 +307,27 @@ public class MonitorDetailActivity extends AppCompatActivity {
 
     /*在线上报*/
     private void addOnline() {
+
+        if(eventReport != null){
+            String json = new Gson().toJson(eventReport);
+            if (RetrofitHelper.getInstance(mContext).networkMonitor.isConnected()) {
+                ProgressDialogUtil.startProgressDialog(this, "上传中...");
+                reportModel.senInofToServer(json, "", this);
+            } else {
+                ToastUtil.setToast(mContext, "网络未连接");
+            }
+            return;
+        }
+
+        if(mEt_name.getText().toString().trim().equals("")){
+            ToastUtil.setToast(mContext,"事件名称未填写");
+            return;
+        }
+
+        if(mEt_description.getText().toString().trim().equals("")){
+            ToastUtil.setToast(mContext,"事件描述未填写");
+            return;
+        }
 
         //网络连接后上报成功
         EventReport report = new EventReport();
@@ -396,6 +423,16 @@ public class MonitorDetailActivity extends AppCompatActivity {
 
     /*本地保存数据*/
     private void addLocalReport() {
+
+        if(mEt_name.getText().toString().trim().equals("")){
+            ToastUtil.setToast(mContext,"事件名称未填写");
+            return;
+        }
+
+        if(mEt_description.getText().toString().trim().equals("")){
+            ToastUtil.setToast(mContext,"事件描述未填写");
+            return;
+        }
         //网络连接后上报成功
         EventReport report = new EventReport();
         report.setXJ_JD(lon);
@@ -435,5 +472,6 @@ public class MonitorDetailActivity extends AppCompatActivity {
         } else {
             ToastUtil.setToast(mContext, "保存失败");
         }
+
     }
 }

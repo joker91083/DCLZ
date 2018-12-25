@@ -253,12 +253,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
                     }.getType());
                     switch (i) {
                         case 0: // 卫星遥感
-                            mTv_satellite_time.setText(list.get(0).getJC_DATE());
+                            mTv_satellite_time.setText(list.get(0).getJC_TIME());
                             mTv_satellite_description.setText(list.get(0).getJC_JGFX());
                             break;
 
                         case 1: // 地基遥感
-                            mTv_ground_time.setText(list.get(0).getJC_DATE());
+                            mTv_ground_time.setText(list.get(0).getJC_TIME());
                             mTv_ground_description.setText(list.get(0).getJC_JGFX());
                             break;
                     }
@@ -301,6 +301,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
                     ArrayList<Buoy> list = new Gson().fromJson(s, new TypeToken<ArrayList<Buoy>>() {
                     }.getType());
                     Buoy buoy = list.get(0);
+                    mTv_buoy_time.setText(buoy.getJC_DATE());
                     mTv_chlorophyll.setText(Constant.strFormat(buoy.getYE_LV_SU()));
                     mTv_oxygen.setText(Constant.strFormat(buoy.getRJ_YANG()));
                     mTv_cyanobacteria.setText(Constant.strFormat(buoy.getLAN_ZAO()));
@@ -409,6 +410,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
                     PatrolAdapter adapter = new PatrolAdapter(mContext, list);
                     mRv_patrol.addItemDecoration(new DividerItemDecoration(mContext, DividerItemDecoration.VERTICAL));
                     mRv_patrol.setAdapter(adapter);
+
                 } else {
 
                 }

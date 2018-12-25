@@ -146,16 +146,22 @@ public class ToolViewModel {
             public void run() {
                 if (imageLayer.getLoadStatus() == LoadStatus.LOADED) {
                     ListenableList<ArcGISSublayer> sublayerList = imageLayer.getSublayers();
+
+                    boolean pflag = false;
+                    boolean cflag = false;
                     for (int i = 0; i < sublayerList.size(); i++) {
                         ArcGISSublayer mapImageSublayer = sublayerList.get(i);
                         String tablename = mapImageSublayer.getName();
                         if (time.contains(tablename)) {
+
+                            pflag = true;
                             mapImageSublayer.setVisible(true);
                             ListenableList<ArcGISSublayer> sublayers = mapImageSublayer.getSublayers();
                             for (int m = 0; m < sublayers.size(); m++) {
                                 ArcGISSublayer sublayer = sublayers.get(m);
                                 String name = sublayer.getName();
                                 if (time.contains(name)) {
+                                    cflag = true;
                                     sublayer.setVisible(true);
                                     Envelope envelope = imageLayer.getFullExtent();
                                     mapView.setViewpointGeometryAsync(envelope,2000);
@@ -171,6 +177,12 @@ public class ToolViewModel {
                             }
                         }
                     }
+
+                    if(!pflag || !cflag){
+                        ToastUtil.setToast(mapView.getContext(),"没有选择时段的影像" +time);
+                    }
+                }else{
+                    ToastUtil.setToast(mapView.getContext(),"影像数据图层加载失败" +time);
                 }
             }
         });
@@ -179,6 +191,66 @@ public class ToolViewModel {
         map.getOperationalLayers().add(imageLayer);
         mapView.setMap(map);
     }
+
+    /*添加地基影像图*/
+    public void addDjImageLayer(final MapView mapView, final String ytime) {
+
+        final String time = ytime.replace("-", "");
+        //final String time = "20171229";
+
+        String url = mapView.getContext().getResources().getString(R.string.diji_imager);
+        final ArcGISMapImageLayer imageLayer = new ArcGISMapImageLayer(url);
+        imageLayer.addDoneLoadingListener(new Runnable() {
+            @Override
+            public void run() {
+                if (imageLayer.getLoadStatus() == LoadStatus.LOADED) {
+                    ListenableList<ArcGISSublayer> sublayerList = imageLayer.getSublayers();
+
+                    boolean pflag = false;
+                    boolean cflag = false;
+                    for (int i = 0; i < sublayerList.size(); i++) {
+                        ArcGISSublayer mapImageSublayer = sublayerList.get(i);
+                        String tablename = mapImageSublayer.getName();
+                        if (time.contains(tablename)) {
+
+                            pflag = true;
+                            mapImageSublayer.setVisible(true);
+                            ListenableList<ArcGISSublayer> sublayers = mapImageSublayer.getSublayers();
+                            for (int m = 0; m < sublayers.size(); m++) {
+                                ArcGISSublayer sublayer = sublayers.get(m);
+                                String name = sublayer.getName();
+                                if (time.contains(name)) {
+                                    cflag = true;
+                                    sublayer.setVisible(true);
+                                    Envelope envelope = imageLayer.getFullExtent();
+                                    mapView.setViewpointGeometryAsync(envelope,2000);
+
+                                    ArcGISMapServiceSublayerInfo info = sublayer.getMapServiceSublayerInfo();
+                                    if(info != null){
+                                        Envelope envelope1 = info.getExtent();
+                                        mapView.setViewpointGeometryAsync(envelope1);
+                                    }
+
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if(!pflag || !cflag){
+                        ToastUtil.setToast(mapView.getContext(),"没有选择时段的影像" +time);
+                    }
+                }else{
+                    ToastUtil.setToast(mapView.getContext(),"影像数据图层加载失败" +time);
+                }
+            }
+        });
+        imageLayer.loadAsync();
+        ArcGISMap map = new ArcGISMap(Basemap.createOpenStreetMap());
+        map.getOperationalLayers().add(imageLayer);
+        mapView.setMap(map);
+    }
+
 
     /*定位到当前位置*/
     public void zoomToMylocation(Context context,MapView mapView, Point point){

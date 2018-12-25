@@ -3,7 +3,6 @@ package com.otitan.dclz.fragment;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,12 +13,8 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
-import com.esri.arcgisruntime.data.TileCache;
 import com.esri.arcgisruntime.geometry.Geometry;
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
-import com.esri.arcgisruntime.mapping.ArcGISMap;
-import com.esri.arcgisruntime.mapping.Basemap;
 import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.mapping.view.SketchEditor;
@@ -39,7 +34,6 @@ import com.otitan.dclz.util.TimeUtil;
 import com.titan.baselibrary.timepaker.TimePopupWindow;
 import com.titan.baselibrary.util.ToastUtil;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -260,7 +254,7 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
                 mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
-                toolViewModel.addShuiImageLayer(mapView,mRb_first.getText().toString());
+                toolViewModel.addDjImageLayer(mapView,mRb_first.getText().toString());
                 showEdit(1);
                 break;
 
@@ -269,7 +263,7 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
                 mRb_second.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mRb_third.setTextColor(getResources().getColor(R.color.gray));
                 mIc_edit.setVisibility(View.VISIBLE);
-                toolViewModel.addShuiImageLayer(mapView,mRb_second.getText().toString());
+                toolViewModel.addDjImageLayer(mapView,mRb_second.getText().toString());
                 showEdit(2);
                 break;
 
@@ -278,7 +272,7 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
                 mRb_second.setTextColor(getResources().getColor(R.color.gray));
                 mRb_third.setTextColor(getResources().getColor(R.color.colorPrimary));
                 mIc_edit.setVisibility(View.VISIBLE);
-                toolViewModel.addShuiImageLayer(mapView,mRb_third.getText().toString());
+                toolViewModel.addDjImageLayer(mapView,mRb_third.getText().toString());
                 showEdit(3);
                 break;
 
@@ -298,7 +292,7 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
                             mTv_title.setText(choose + " 监测记录");
                             // 根据选择的时间，查询监测信息
                             getRemoteData(choose, 1);
-                            toolViewModel.addShuiImageLayer(mapView,choose);
+                            toolViewModel.addDjImageLayer(mapView,choose);
                         } else {
                             ToastUtil.setToast(mContext, "选择日期错误，无法查询！");
                         }
@@ -454,7 +448,7 @@ public class GroundFragment extends BaseFragment implements View.OnClickListener
 
 
     public void getHomeTime(String type,String time){
-        toolViewModel.addShuiImageLayer(mapView,time);
+        toolViewModel.addDjImageLayer(mapView,time);
     }
 
 }

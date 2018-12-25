@@ -47,8 +47,8 @@ public class PatrolAdapter extends RecyclerView.Adapter<PatrolAdapter.MyViewHold
         String title = mContext.getResources().getString(R.string.serverhost);
         String fj_url = mDatas.get(position).getFJ_URL();
         String[] split = fj_url.split(",");
-//        String path = title + split[0];
-        String path = "http://39.129.3.99:8001/UpLoadFiles/2017-04/472b3f0b-bbca-47f2-af6f-11515b23c916_2912_TMPSNAPSHOT1491274024229.jpg";
+        String path = title + split[0];
+        //String path = "http://39.129.3.99:8001/UpLoadFiles/2017-04/472b3f0b-bbca-47f2-af6f-11515b23c916_2912_TMPSNAPSHOT1491274024229.jpg";
         Picasso.with(mContext).load(path).into(holder.mIv_picture);
     }
 
