@@ -23,6 +23,7 @@
     <uses-permission android:name="android.permission.BAIDU_LOCATION_SERVICE" />
     <!-- 获取运营商信息 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAPTURE_AUDIO_OUTPUT"/>
     <uses-permission
         android:name="android.permission.READ_LOGS"
         tools:ignore="ProtectedPermissions" />
@@ -63,7 +64,6 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
-
         <!-- 主页 -->
         <activity
             android:name=".MainActivity"
@@ -93,13 +93,13 @@
         <activity android:name=".activity.WeeklyDetailActivity" />
         <activity android:name=".activity.PdfActivity" />
         <activity android:name=".activity.DocActivity" />
-        <activity android:name=".activity.GdnavigationActivity"/>
+        <activity android:name=".activity.GdnavigationActivity" />
 
-        <!--高德导航-->
+        <!-- 高德导航 -->
         <activity
             android:name="com.amap.api.navi.AmapRouteActivity"
             android:configChanges="orientation|keyboardHidden|screenSize" />
-
+        <activity android:name=".hikvision.HikVisionActivity"></activity>
     </application>
 
 </manifest>

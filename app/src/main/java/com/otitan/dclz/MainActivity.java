@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements ViewPager.OnPageC
             android.Manifest.permission.READ_EXTERNAL_STORAGE,
             android.Manifest.permission.WRITE_EXTERNAL_STORAGE,
             android.Manifest.permission.ACCESS_FINE_LOCATION,
+            android.Manifest.permission.CAPTURE_AUDIO_OUTPUT
     };
 
     @Override

@@ -222,6 +222,42 @@
                         android:text=""/>
                 </LinearLayout>
 
+                <!--<LinearLayout
+                    android:id="@+id/up_hik"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/background_view_rounded_white"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:textSize="18sp"
+                        android:text="@string/user_version"/>
+
+                    <TextView
+                        android:id="@+id/tv_hik"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="3"
+                        android:gravity="end"
+                        android:textSize="18sp"
+                        android:text=""/>
+                </LinearLayout>-->
+
+                <TextView
+                    android:id="@+id/tv_hik"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="15dp"
+                    android:layout_marginTop="5dp"
+                    android:background="@drawable/background_view_rounded_white"
+                    android:textSize="18sp"
+                    android:text="视频监控"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
