@@ -1,13 +1,10 @@
 package com.otitan.dclz.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -39,7 +36,6 @@ import com.otitan.dclz.net.RetrofitHelper;
 import com.otitan.dclz.util.Constant;
 import com.otitan.dclz.util.MobileUtil;
 import com.squareup.picasso.Picasso;
-import com.titan.baselibrary.util.MobileInfoUtil;
 import com.titan.baselibrary.util.ScreenTool;
 import com.titan.baselibrary.util.ToastUtil;
 import com.youth.banner.Banner;
@@ -48,8 +44,6 @@ import com.youth.banner.Transformer;
 import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
-import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

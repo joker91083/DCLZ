@@ -122,7 +122,7 @@ dependencies {
     //When using Kotlin use kapt instead:
 
     //kapt "io.objectbox:objectbox-processor:$objectboxVersion"
-    implementation project(':LibraryManager:eventlibrary')
+//    implementation project(':LibraryManager:eventlibrary')
 
     /*浏览pdf*/
     implementation 'com.lidong.pdf:android_pdf:1.0.1'

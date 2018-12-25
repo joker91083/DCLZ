@@ -15,6 +15,7 @@ import com.amap.api.maps.model.TextOptions;
 import com.google.gson.Gson;
 import com.otitan.dclz.R;
 import com.otitan.dclz.bean.User;
+import com.otitan.dclz.hikvision.HikVisionActivity;
 import com.otitan.dclz.net.RetrofitHelper;
 import com.titan.baselibrary.util.ToastUtil;
 import com.titan.versionupdata.VersionUpdata;
@@ -53,6 +54,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
     TextView mTv_check;
     @BindView(R.id.up_version)
     LinearLayout upVersion;
+    @BindView(R.id.tv_hik)
+    TextView mTv_hik;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,8 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
         mTv_check.setOnClickListener(this);
 
         upVersion.setOnClickListener(this);
+
+        mTv_hik.setOnClickListener(this);
     }
 
     /**
@@ -146,6 +151,10 @@ public class UserActivity extends AppCompatActivity implements View.OnClickListe
                     ToastUtil.setToast(this,"已经是最新版本");
                 }
 
+                break;
+
+            case R.id.tv_hik:
+                startActivity(new Intent(this, HikVisionActivity.class));
                 break;
         }
     }
