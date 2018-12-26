@@ -179,7 +179,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
         String now = Constant.dateFormat.format(new Date(System.currentTimeMillis()));
         // 一小时前
         long current = System.currentTimeMillis();
-        current -= 60 * 60 * 1000;
+        current -= 24*60 * 60 * 1000;
         String anHourAgo = Constant.dateFormat.format(new Date(current));
 
         mTv_buoy_time.setText(now);
@@ -302,6 +302,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
                     mTv_temperature.setText(Constant.strFormat(buoy.getSHUI_WEN()));
                     mTv_turbidity.setText(Constant.strFormat(buoy.getZHU_DU()));
                     mTv_humidity.setText(Constant.strFormat(buoy.getSHI_DU()));
+
                 } else {
                     //么有数据
                 }
@@ -406,7 +407,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener, OnBa
                     mRv_patrol.setAdapter(adapter);
 
                 } else {
-
+                    //没有数据
                 }
             }
         });

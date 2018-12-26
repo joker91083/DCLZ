@@ -44,7 +44,7 @@
     <string name="home_oxygen">溶解氧</string>
     <string name="home_oxygen_unit">mg/L</string>
     <string name="home_cyanobacteria">蓝藻</string>
-    <string name="home_cyanobacteria_unit">g/L</string>
+    <string name="home_cyanobacteria_unit">cell/mL</string>
     <string name="home_temperature">水温</string>
     <string name="home_temperature_unit">℃</string>
     <string name="home_turbidity">浊度</string>
@@ -134,9 +134,9 @@
     <!--内网地基影像-->
     <string name="diji_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/DJJC_SH/MapServer</string>
     <!--云服务-->
-    <string name="serverhost">http://101.201.54.143:5830/</string>
+    <!--<string name="serverhost">http://101.201.54.143:5830/</string>-->
     <!--客户内网-->
-    <!--<string name="serverhost">http://192.168.168.62:8010/</string>-->
+    <string name="serverhost">http://192.168.168.62:8010/</string>
 
     <!--版本更新云服务地址-->
     <string name="updataurl">http://101.201.54.143:8031/apk/dclz/dclzversion.xml</string>

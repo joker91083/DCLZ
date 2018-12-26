@@ -6,6 +6,16 @@
     android:layout_height="match_parent"
     tools:context=".hikvision.HikVisionActivity">
 
+    <TextView
+        android:id="@+id/sure"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="@color/white"
+        android:textSize="@dimen/larger_txtsize18"
+        android:background="@drawable/background_view_rounded_orange"
+        android:text="启动" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,6 +24,7 @@
             android:id="@+id/sv_surveillance"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            android:layout_marginTop="50dp"/>
+            android:layout_marginTop="60dp" />
+
     </RelativeLayout>
 </android.support.constraint.ConstraintLayout>

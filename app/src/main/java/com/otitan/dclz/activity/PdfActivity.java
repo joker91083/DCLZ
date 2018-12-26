@@ -15,12 +15,15 @@ import com.otitan.dclz.R;
 import com.titan.baselibrary.util.ProgressDialogUtil;
 import com.titan.baselibrary.util.ToastUtil;
 
+import retrofit2.http.Url;
+
 public class PdfActivity extends AppCompatActivity implements OnPageChangeListener
         ,OnLoadCompleteListener, OnDrawListener {
 
     private PDFView pdfView;
     private ImageView back;
     private String pdfurl= "";
+    private String pdfname = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,7 +32,10 @@ public class PdfActivity extends AppCompatActivity implements OnPageChangeListen
 
         pdfView = findViewById( R.id.pdfView );
         pdfurl = getIntent().getStringExtra("url");
-        displayFromFile1(pdfurl,"文件浏览");
+        pdfname = getIntent().getStringExtra("name");
+
+        displayFromFile1(pdfurl,pdfname);
+        //displayFromFile1("http://file.chmsp.com.cn/colligate/file/00100000224821.pdf", "00100000224821.pdf");
 
         back = findViewById(R.id.pdf_close);
         back.setOnClickListener(new View.OnClickListener() {
@@ -68,7 +74,7 @@ public class PdfActivity extends AppCompatActivity implements OnPageChangeListen
      */
     @Override
     public void loadComplete(int nbPages) {
-        ToastUtil.setToast( PdfActivity.this ,  "加载完成" + nbPages);
+        //ToastUtil.setToast( PdfActivity.this ,  "加载完成" + nbPages);
         hideProgress();
     }
 

@@ -12,6 +12,8 @@ import com.otitan.dclz.bean.Weekly;
 import com.titan.baselibrary.util.ToastUtil;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -95,22 +97,29 @@ public class WeeklyDetailActivity extends AppCompatActivity {
 
     }
 
-    /*跳转到文件浏览页面*/
+    /**跳转到文件浏览页面*/
     private void toFileActivity(){
         String host = getResources().getString(R.string.serverhost);
-        String url = host+weekly.getJCBG_FILE();
-        File file = new File(url);
-        if(file.getName().contains(".pdf")){
-            Intent intent = new Intent(WeeklyDetailActivity.this,PdfActivity.class);
-            intent.putExtra("url",url);
-            startActivity(intent);
-        }else if(file.getName().contains(".docx") || file.getName().contains(".doc")){
-            Intent intent = new Intent(WeeklyDetailActivity.this,DocActivity.class);
-            intent.putExtra("url",url);
-            startActivity(intent);
-        }else{
-            ToastUtil.setToast(WeeklyDetailActivity.this,"未知类型文件");
-        }
+        try {
+            String value = URLEncoder.encode(weekly.getJCBG_FILE(), "utf-8");
+            String url = host+value;
 
+            File file = new File(url);
+            if(file.getName().contains(".pdf")){
+                Intent intent = new Intent(WeeklyDetailActivity.this,PdfActivity.class);
+                intent.putExtra("url",url);
+                intent.putExtra("name",value);
+                startActivity(intent);
+            }else if(file.getName().contains(".docx") || file.getName().contains(".doc")){
+                Intent intent = new Intent(WeeklyDetailActivity.this,DocActivity.class);
+                intent.putExtra("url",url);
+                intent.putExtra("name",value);
+                startActivity(intent);
+            }else{
+                ToastUtil.setToast(WeeklyDetailActivity.this,"未知类型文件");
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
     }
 }

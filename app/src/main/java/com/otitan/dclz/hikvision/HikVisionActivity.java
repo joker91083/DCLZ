@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.TextView;
 
 import com.hikvision.netsdk.HCNetSDK;
-import com.hikvision.netsdk.NET_DVR_CLIENTINFO;
 import com.hikvision.netsdk.NET_DVR_DEVICEINFO_V30;
 import com.hikvision.netsdk.NET_DVR_PREVIEWINFO;
 import com.hikvision.netsdk.RealPlayCallBack;
@@ -21,15 +23,18 @@ import butterknife.ButterKnife;
 /**
  * 视频监控
  */
-public class HikVisionActivity extends AppCompatActivity {
+public class HikVisionActivity extends AppCompatActivity implements SurfaceHolder.Callback {
 
     @BindView(R.id.sv_surveillance)
     SurfaceView mSv_surveillance;
 
-    public String ADDRESS = "192.168.100.251"; // IP
+    public String IP = "192.168.100.251"; // IP
     public int PORT = 8000; // 端口
     public String USER = "admin"; // 账号
     public String PSD = "hik12345"; // 密码
+
+    @BindView(R.id.sure)
+    TextView sure;
 
     private int iLogID;
     private int m_iStartChan = 0;
@@ -46,6 +51,9 @@ public class HikVisionActivity extends AppCompatActivity {
 
     private Thread thread;
 
+
+    private NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = null;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,30 +62,42 @@ public class HikVisionActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         initView();
+
     }
 
     private void initView() {
-        ADDRESS = "222.85.147.92";
+        /*IP = "222.85.147.92";
         PORT = 8000;
         USER = "admin";
-        PSD = "sfb12345";
+        PSD = "sfb12345";*/
 
+        initeSdk();
         initHikVision();
     }
 
+    /**
+     * @return true - success;false - fail
+     * @fn initeSdk
+     * @brief SDK init
+     */
+    private boolean initeSdk() {
+        // init net sdk
+        if (!HCNetSDK.getInstance().NET_DVR_Init()) {
+            Log.e(TAG, "HCNetSDK init is failed!");
+            return false;
+        }
+        HCNetSDK.getInstance().NET_DVR_SetLogToFile(3, "/mnt/sdcard/sdklog/", true);
+
+        mSv_surveillance.getHolder().addCallback(this);
+        return true;
+    }
+
     private void initHikVision() {
-        HCNetSDK.getInstance().NET_DVR_Init(); // 初始化SDK
 
         // 登录设备
-        NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
-        iLogID = HCNetSDK.getInstance().NET_DVR_Login_V30(ADDRESS, PORT, USER, PSD, m_oNetDvrDeviceInfoV30);
-        if (m_oNetDvrDeviceInfoV30.byChanNum > 0) {
-            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartChan;
-            m_iChanNum = m_oNetDvrDeviceInfoV30.byChanNum;
-        } else if (m_oNetDvrDeviceInfoV30.byIPChanNum > 0) {
-            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartDChan;
-            m_iChanNum = m_oNetDvrDeviceInfoV30.byIPChanNum + m_oNetDvrDeviceInfoV30.byHighDChanNum * 256;
-        }
+        //NET_DVR_DEVICEINFO_V30 m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
+        //iLogID = HCNetSDK.getInstance().NET_DVR_Login_V30(ADDRESS, PORT, USER, PSD, m_oNetDvrDeviceInfoV30);
+        iLogID = loginDevice();
 
         //设置默认点
         thread = new Thread(new Runnable() {
@@ -95,14 +115,21 @@ public class HikVisionActivity extends AppCompatActivity {
                 }
             }
         });
-        thread.start();
+        //thread.start();
+
+        sure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startSinglePreview();//预览
+            }
+        });
     }
 
     private void startSinglePreview() {
         NET_DVR_PREVIEWINFO previewInfo = new NET_DVR_PREVIEWINFO();
-        previewInfo.lChannel = m_iStartChan; // 通道号
+        previewInfo.lChannel = m_iStartChan+13; // 通道号
         previewInfo.dwStreamType = 0; // 码流类型
-        previewInfo.bBlocked = 0;
+        previewInfo.bBlocked = 1;
 
         RealPlayCallBack fRealDataCallBack = getRealPlayerCbf();
 
@@ -169,5 +196,71 @@ public class HikVisionActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+
+    }
+
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+    }
+
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+
+    }
+
+
+    /**
+     * @return login ID
+     * @fn loginDevice
+     * @author zhangqing
+     */
+    private int loginDevice() {
+        int iLogID = -1;
+
+        iLogID = loginNormalDevice();
+
+        // iLogID = JNATest.TEST_EzvizLogin();
+        // iLogID = loginEzvizDevice();
+
+        return iLogID;
+    }
+
+    /**
+     * @return login ID
+     * @fn loginNormalDevice
+     * @author zhuzhenlei
+     * @brief login on device
+     * [out]
+     */
+    private int loginNormalDevice() {
+        // get instance
+        m_oNetDvrDeviceInfoV30 = new NET_DVR_DEVICEINFO_V30();
+        if (null == m_oNetDvrDeviceInfoV30) {
+            Log.e(TAG, "HKNetDvrDeviceInfoV30 new is failed!");
+            return -1;
+        }
+        // call NET_DVR_Login_v30 to login on, port 8000 as default
+        int iLogID = HCNetSDK.getInstance().NET_DVR_Login_V30(IP, PORT,USER, PSD, m_oNetDvrDeviceInfoV30);
+        if (iLogID < 0) {
+            Log.e(TAG, "NET_DVR_Login is failed!Err:"
+                    + HCNetSDK.getInstance().NET_DVR_GetLastError());
+            return -1;
+        }
+        if (m_oNetDvrDeviceInfoV30.byChanNum > 0) {
+            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartChan;
+            m_iChanNum = m_oNetDvrDeviceInfoV30.byChanNum;
+        } else if (m_oNetDvrDeviceInfoV30.byIPChanNum > 0) {
+            m_iStartChan = m_oNetDvrDeviceInfoV30.byStartDChan;
+            m_iChanNum = m_oNetDvrDeviceInfoV30.byIPChanNum
+                    + m_oNetDvrDeviceInfoV30.byHighDChanNum * 256;
+        }
+        Log.i(TAG, "NET_DVR_Login is Successful!");
+
+        return iLogID;
     }
 }
