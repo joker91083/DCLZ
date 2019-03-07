@@ -41,7 +41,7 @@ public class EventReportModel {
                         ProgressDialogUtil.stopProgressDialog(activity);
                         if(s.equals("true")){
                             ToastUtil.setToast(activity, "上报成功");
-                            if(id.equals("")){
+                            if(!id.equals("")){
                                 delLocalResport(ConverterUtils.toLong(id));
                             }
                             activity.finish();

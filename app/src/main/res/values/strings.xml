@@ -134,9 +134,9 @@
     <!--内网地基影像-->
     <string name="diji_imager">http://192.168.168.62:6080/arcgis/rest/services/DCLZ/DJJC_SH/MapServer</string>
     <!--云服务-->
-    <!--<string name="serverhost">http://101.201.54.143:5830/</string>-->
+    <string name="serverhost">http://101.201.54.143:5830/</string>
     <!--客户内网-->
-    <string name="serverhost">http://192.168.168.62:8010/</string>
+    <!--<string name="serverhost">http://192.168.168.62:8010/</string>-->
 
     <!--版本更新云服务地址-->
     <string name="updataurl">http://101.201.54.143:8031/apk/dclz/dclzversion.xml</string>
